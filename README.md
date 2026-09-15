@@ -33,7 +33,7 @@ Các script có sẵn:
 
 ### Catalog và hình ảnh mẫu
 
-Toàn bộ shop, sản phẩm, giá, biến thể và số lượng trong MVP là **dữ liệu demo**, không phải inventory thực tế. URL ảnh hiện là ảnh mẫu từ Unsplash dùng để hoàn thiện UI; chúng không được thu thập từ website shop, không ngụ ý thuộc về shop nào và không phải ảnh hàng hóa thật của các shop trong fixture. Khi phát hành production, thay từng `image`/`imageAlt` bằng ảnh do shop cung cấp với quyền sử dụng rõ ràng (hoặc CDN nội bộ), giữ lại `imageAlt`, trạng thái tải lỗi và kiểm duyệt nội dung trước khi public.
+Toàn bộ shop, sản phẩm, giá, biến thể và số lượng trong MVP là **dữ liệu demo**, không phải inventory thực tế. URL ảnh hiện là ảnh mẫu từ Unsplash được phân nhóm theo loại sản phẩm (váy/đầm, áo, quần, phụ kiện, công sở) để tránh lặp ảnh và giúp alt text mô tả đúng category; chúng không được thu thập từ website shop, không ngụ ý thuộc về shop nào và không phải ảnh hàng hóa thật của các shop trong fixture. URL ảnh công khai có thể thay đổi hoặc không phù hợp giấy phép cho production. Khi phát hành, thay từng `image`/`imageAlt` bằng ảnh do shop cung cấp với quyền sử dụng rõ ràng (hoặc CDN nội bộ), giữ lại `imageAlt`, trạng thái tải lỗi và kiểm duyệt nội dung trước khi public.
 
 ### Marketplace demo (Shopee / TikTok Shop)
 

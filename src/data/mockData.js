@@ -2,6 +2,41 @@
 import { vietnamProvinces, provinceRegions } from './vietnamProvinces'
 
 const sampleImage = (id, width = 900) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=85`
+const categoryVisuals = {
+  'Váy & đầm': [
+    ['photo-1496217590455-aa63a8350eea', 'Ảnh mẫu váy linen nữ dáng midi'],
+    ['photo-1539008835657-9e8e9680c956', 'Ảnh mẫu đầm nữ cổ vuông'],
+    ['photo-1515372039744-b8f02a3ae446', 'Ảnh mẫu váy nữ hai dây'],
+    ['photo-1515886657613-9f3515b0c78f', 'Ảnh mẫu đầm nữ phong cách tối giản'],
+  ],
+  'Áo kiểu': [
+    ['photo-1605763240000-7e93b172d754', 'Ảnh mẫu áo sơ mi nữ'],
+    ['photo-1564257577054-2e7f8d50b3b3', 'Ảnh mẫu áo kiểu nữ peplum'],
+    ['photo-1596755389378-c31d21fd1273', 'Ảnh mẫu áo ren nữ'],
+    ['photo-1551488831-00ddcb6c6bd3', 'Ảnh mẫu áo nữ tay dài'],
+  ],
+  Quần: [
+    ['photo-1594633312681-425c7b97ccd1', 'Ảnh mẫu quần nữ ống rộng'],
+    ['photo-1541099649105-f69ad21f3246', 'Ảnh mẫu quần jeans nữ'],
+    ['photo-1506629905607-d9ccf2a6e6a6', 'Ảnh mẫu quần nữ phong cách thường ngày'],
+  ],
+  'Phụ kiện': [
+    ['photo-1553062407-98eeb64c6a62', 'Ảnh mẫu túi cói nữ'],
+    ['photo-1601924994987-69e26d50dc26', 'Ảnh mẫu khăn lụa nữ'],
+    ['photo-1529139574466-a303027c1d8b', 'Ảnh mẫu phụ kiện thời trang nữ'],
+  ],
+  'Đồ công sở': [
+    ['photo-1591369822096-ffd140ec948f', 'Ảnh mẫu blazer nữ công sở'],
+    ['photo-1551488831-00ddcb6c6bd3', 'Ảnh mẫu chân váy công sở nữ'],
+    ['photo-1605763240000-7e93b172d754', 'Ảnh mẫu áo sơ mi công sở nữ'],
+  ],
+}
+
+const categoryImage = (category, index = 0, width = 700) => {
+  const visuals = categoryVisuals[category] || categoryVisuals['Áo kiểu']
+  const [id, imageAlt] = visuals[index % visuals.length]
+  return { image: sampleImage(id, width), imageAlt }
+}
 
 export const categories = ['Tất cả', 'Váy & đầm', 'Áo kiểu', 'Quần', 'Phụ kiện', 'Đồ công sở']
 export const marketplaceSources = [
@@ -51,18 +86,18 @@ const product = (data) => ({
 })
 
 export const products = [
-  product({ id: 'p1', shopId: 'may-studio', category: 'Váy & đầm', name: 'Váy Linen Nắng Mai', price: '690.000đ', oldPrice: '820.000đ', tag: 'Bán chạy', stock: 8, variants: [{ name: 'Màu', values: ['Kem', 'Nâu đất'] }, { name: 'Size', values: ['S', 'M', 'L'] }], image: sampleImage('photo-1496217590455-aa63a8350eea', 700), color: 'beige' }),
-  product({ id: 'p2', shopId: 'nang-tho', category: 'Đồ công sở', name: 'Áo Sơ Mi Mộc Miên', price: '420.000đ', tag: 'Mới về', stock: 12, variants: [{ name: 'Màu', values: ['Trắng', 'Xanh nhạt'] }, { name: 'Size', values: ['S', 'M', 'L'] }], image: sampleImage('photo-1605763240000-7e93b172d754', 700), color: 'lilac' }),
-  product({ id: 'p3', shopId: 'may-studio', category: 'Váy & đầm', name: 'Chân Váy Midi Hạ', price: '550.000đ', stock: 3, variants: [{ name: 'Màu', values: ['Xanh khói', 'Đen'] }, { name: 'Size', values: ['S', 'M'] }], image: sampleImage('photo-1551488831-00ddcb6c6bd3', 700), color: 'blue' }),
-  product({ id: 'p4', shopId: 'tiem-nha-bom', category: 'Áo kiểu', name: 'Áo Peplum Cúc Ngọc', price: '390.000đ', stock: 0, variants: [{ name: 'Màu', values: ['Hồng phấn', 'Trắng'] }, { name: 'Size', values: ['M', 'L'] }], image: sampleImage('photo-1564257577054-2e7f8d50b3b3', 700), color: 'rose' }),
-  product({ id: 'p5', shopId: 'mot-nua', category: 'Quần', name: 'Quần Suông An Nhiên', price: '480.000đ', tag: 'Dễ mặc', stock: 7, variants: [{ name: 'Màu', values: ['Đen', 'Nâu'] }, { name: 'Size', values: ['S', 'M', 'L', 'XL'] }], image: sampleImage('photo-1594633312681-425c7b97ccd1', 700), color: 'sand' }),
-  product({ id: 'p6', shopId: 'hiem-studio', category: 'Phụ kiện', name: 'Túi Cói Mùa Hạ', price: '320.000đ', stock: 5, variants: [{ name: 'Màu', values: ['Tự nhiên'] }], image: sampleImage('photo-1553062407-98eeb64c6a62', 700), color: 'gold' }),
-  product({ id: 'p7', shopId: 'gom-fashion', category: 'Váy & đầm', name: 'Đầm Cổ Vuông Gốm', price: '790.000đ', tag: 'Mới về', stock: 2, variants: [{ name: 'Màu', values: ['Đỏ gạch', 'Kem'] }, { name: 'Size', values: ['S', 'M', 'L'] }], image: sampleImage('photo-1539008835657-9e8e9680c956', 700), color: 'terracotta' }),
-  product({ id: 'p8', shopId: 'nang-tho', category: 'Đồ công sở', name: 'Blazer Vải Đũi', price: '890.000đ', stock: 4, variants: [{ name: 'Màu', values: ['Be', 'Navy'] }, { name: 'Size', values: ['S', 'M', 'L'] }], image: sampleImage('photo-1591369822096-ffd140ec948f', 700), color: 'beige' }),
-  product({ id: 'p9', shopId: 'tiem-nha-bom', category: 'Áo kiểu', name: 'Áo Ren Ngày Nắng', price: '350.000đ', stock: 9, variants: [{ name: 'Màu', values: ['Trắng'] }, { name: 'Size', values: ['S', 'M'] }], image: sampleImage('photo-1596755389378-c31d21fd1273', 700), color: 'white' }),
-  product({ id: 'p10', shopId: 'mot-nua', category: 'Quần', name: 'Jeans Ống Đứng Phố', price: '620.000đ', tag: 'Bán chạy', stock: 6, variants: [{ name: 'Màu', values: ['Xanh denim'] }, { name: 'Size', values: ['26', '27', '28', '29'] }], image: sampleImage('photo-1541099649105-f69ad21f3246', 700), color: 'denim' }),
-  product({ id: 'p11', shopId: 'hiem-studio', category: 'Phụ kiện', name: 'Khăn Lụa Vẽ Tay', price: '280.000đ', stock: 1, variants: [{ name: 'Màu', values: ['Vàng nghệ', 'Xanh rêu'] }], image: sampleImage('photo-1601924994987-69e26d50dc26', 700), color: 'gold' }),
-  product({ id: 'p12', shopId: 'gom-fashion', category: 'Váy & đầm', name: 'Váy Hai Dây Hoàng Hôn', price: '740.000đ', stock: 10, variants: [{ name: 'Màu', values: ['Cam đất', 'Nâu'] }, { name: 'Size', values: ['S', 'M', 'L'] }], image: sampleImage('photo-1515372039744-b8f02a3ae446', 700), color: 'terracotta' }),
+  product({ id: 'p1', shopId: 'may-studio', category: 'Váy & đầm', name: 'Váy Linen Nắng Mai', price: '690.000đ', oldPrice: '820.000đ', tag: 'Bán chạy', stock: 8, variants: [{ name: 'Màu', values: ['Kem', 'Nâu đất'] }, { name: 'Size', values: ['S', 'M', 'L'] }], ...categoryImage('Váy & đầm', 0), color: 'beige' }),
+  product({ id: 'p2', shopId: 'nang-tho', category: 'Đồ công sở', name: 'Áo Sơ Mi Mộc Miên', price: '420.000đ', tag: 'Mới về', stock: 12, variants: [{ name: 'Màu', values: ['Trắng', 'Xanh nhạt'] }, { name: 'Size', values: ['S', 'M', 'L'] }], ...categoryImage('Đồ công sở', 2), color: 'lilac' }),
+  product({ id: 'p3', shopId: 'may-studio', category: 'Váy & đầm', name: 'Chân Váy Midi Hạ', price: '550.000đ', stock: 3, variants: [{ name: 'Màu', values: ['Xanh khói', 'Đen'] }, { name: 'Size', values: ['S', 'M'] }], ...categoryImage('Váy & đầm', 1), color: 'blue' }),
+  product({ id: 'p4', shopId: 'tiem-nha-bom', category: 'Áo kiểu', name: 'Áo Peplum Cúc Ngọc', price: '390.000đ', stock: 0, variants: [{ name: 'Màu', values: ['Hồng phấn', 'Trắng'] }, { name: 'Size', values: ['M', 'L'] }], ...categoryImage('Áo kiểu', 1), color: 'rose' }),
+  product({ id: 'p5', shopId: 'mot-nua', category: 'Quần', name: 'Quần Suông An Nhiên', price: '480.000đ', tag: 'Dễ mặc', stock: 7, variants: [{ name: 'Màu', values: ['Đen', 'Nâu'] }, { name: 'Size', values: ['S', 'M', 'L', 'XL'] }], ...categoryImage('Quần', 0), color: 'sand' }),
+  product({ id: 'p6', shopId: 'hiem-studio', category: 'Phụ kiện', name: 'Túi Cói Mùa Hạ', price: '320.000đ', stock: 5, variants: [{ name: 'Màu', values: ['Tự nhiên'] }], ...categoryImage('Phụ kiện', 0), color: 'gold' }),
+  product({ id: 'p7', shopId: 'gom-fashion', category: 'Váy & đầm', name: 'Đầm Cổ Vuông Gốm', price: '790.000đ', tag: 'Mới về', stock: 2, variants: [{ name: 'Màu', values: ['Đỏ gạch', 'Kem'] }, { name: 'Size', values: ['S', 'M', 'L'] }], ...categoryImage('Váy & đầm', 2), color: 'terracotta' }),
+  product({ id: 'p8', shopId: 'nang-tho', category: 'Đồ công sở', name: 'Blazer Vải Đũi', price: '890.000đ', stock: 4, variants: [{ name: 'Màu', values: ['Be', 'Navy'] }, { name: 'Size', values: ['S', 'M', 'L'] }], ...categoryImage('Đồ công sở', 0), color: 'beige' }),
+  product({ id: 'p9', shopId: 'tiem-nha-bom', category: 'Áo kiểu', name: 'Áo Ren Ngày Nắng', price: '350.000đ', stock: 9, variants: [{ name: 'Màu', values: ['Trắng'] }, { name: 'Size', values: ['S', 'M'] }], ...categoryImage('Áo kiểu', 2), color: 'white' }),
+  product({ id: 'p10', shopId: 'mot-nua', category: 'Quần', name: 'Jeans Ống Đứng Phố', price: '620.000đ', tag: 'Bán chạy', stock: 6, variants: [{ name: 'Màu', values: ['Xanh denim'] }, { name: 'Size', values: ['26', '27', '28', '29'] }], ...categoryImage('Quần', 1), color: 'denim' }),
+  product({ id: 'p11', shopId: 'hiem-studio', category: 'Phụ kiện', name: 'Khăn Lụa Vẽ Tay', price: '280.000đ', stock: 1, variants: [{ name: 'Màu', values: ['Vàng nghệ', 'Xanh rêu'] }], ...categoryImage('Phụ kiện', 1), color: 'gold' }),
+  product({ id: 'p12', shopId: 'gom-fashion', category: 'Váy & đầm', name: 'Váy Hai Dây Hoàng Hôn', price: '740.000đ', stock: 10, variants: [{ name: 'Màu', values: ['Cam đất', 'Nâu'] }, { name: 'Size', values: ['S', 'M', 'L'] }], ...categoryImage('Váy & đầm', 3), color: 'terracotta' }),
 ]
 
 const marketplaceNames = {
@@ -86,7 +121,7 @@ products.push(...shops.filter((shop) => shop.province !== 'Hà Nội').flatMap((
     stock: 2 + ((index + itemIndex * 3) % 11),
     marketplaceSource: (index + itemIndex) % 2 === 0 ? 'shopee' : 'tiktok-shop',
     variants: [{ name: 'Màu', values: ['Kem', 'Xanh', 'Đen'] }, { name: 'Size', values: ['S', 'M', 'L'] }],
-    image: shop.image.replace('w=900', 'w=700'),
+    ...categoryImage(shop.category, index + itemIndex, 700),
     color: shop.accent,
   }))
 }))
