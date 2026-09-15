@@ -19,19 +19,22 @@ Các script có sẵn:
 
 ## Kiến trúc MVP
 
-- `src/data/mockData.js` là ranh giới dữ liệu duy nhất của frontend. Các component chỉ đọc `shops`, `products` và `categories` từ module này; khi backend sẵn sàng, thay module bằng API hooks/service mà không cần đổi UI.
-- `src/App.jsx` chứa các luồng browsing chính: tìm kiếm, lọc danh mục, lưu shop, xem chi tiết shop/sản phẩm và các CTA gọi điện, Zalo, bản đồ.
+- `src/data/mockData.js` chứa fixture công khai; `src/data/catalogStore.js` là store boundary với các action `upsertShop`, `upsertProduct`, `setShopVerification`. Admin Preview dùng boundary này để mô phỏng quản lý dữ liệu trong memory, không ghi database.
+- `src/utils/location.js` chứa Haversine helper, format khoảng cách và link chỉ đường. `src/config/map.js` là cấu hình provider; hiện dùng Google Maps directions link không cần API key và không nhúng tile/bản đồ thật.
+- `src/App.jsx` chứa các luồng browsing chính: tìm kiếm, lọc danh mục, lưu shop, xem chi tiết shop/sản phẩm, CTA gọi điện/Zalo/chỉ đường, xin quyền geolocation và Admin Preview.
 - `src/styles.css` chứa design system và responsive layout mobile-first. Ảnh demo dùng public Unsplash URLs, không phải dữ liệu scraping.
 
 ## Lộ trình tích hợp admin & dữ liệu
 
 ### Shop verification và admin
 
-Xây dựng admin dashboard với vai trò `admin`/`shop_owner`, quy trình `draft → pending_review → verified → rejected`, audit log và các trường bắt buộc (tên, địa chỉ chính xác, số điện thoại, giờ mở cửa, ảnh, khoảng giá). Chỉ shop đã `verified` mới hiển thị public; chủ shop có thể cập nhật hồ sơ nhưng thay đổi nhạy cảm cần duyệt lại.
+MVP có nút **Quản trị demo** ở header. View này cho phép thêm/sửa shop, thêm/sửa sản phẩm và bật/tắt trạng thái xác minh; dữ liệu chỉ sống trong state của tab và được gắn nhãn `ADMIN PREVIEW · MOCK`. Public browsing chỉ hiển thị shop `verified`.
+
+Khi thay bằng backend, tạo API adapter giữ cùng shape với `catalogStore`: `GET /shops?verified=true`, `POST/PATCH /admin/shops`, `POST/PATCH /admin/products`, `POST /admin/shops/:id/verification`. Dùng authentication/authorization ở server, audit log và optimistic concurrency; không đưa service secret vào Vite/frontend. Quy trình khuyến nghị là `draft → pending_review → verified → rejected`, với các trường bắt buộc (tên, địa chỉ chính xác, số điện thoại, giờ mở cửa, ảnh, khoảng giá). Chủ shop có thể cập nhật hồ sơ nhưng thay đổi nhạy cảm cần duyệt lại.
 
 ### Maps API
 
-Backend nên lưu latitude/longitude và `place_id` sau khi địa chỉ được chuẩn hóa. Frontend có thể dùng Google Maps hoặc Mapbox cho geocoding, marker và deep link chỉ đường. Không nên geocode lại mỗi lần render; cache kết quả và đặt giới hạn quota.
+Mỗi mock shop hiện có `coordinates` minh họa (không đại diện cho dữ liệu shop thật). Người dùng có thể cấp quyền browser geolocation; frontend tính khoảng cách đường chim bay bằng Haversine và tự fallback về khoảng cách khu vực mock nếu quyền bị từ chối hoặc browser không hỗ trợ. CTA **Chỉ đường** mở Google Maps directions bằng latitude/longitude, không yêu cầu API key và không tuyên bố có live map tiles. Backend nên lưu latitude/longitude và `place_id` sau khi địa chỉ được chuẩn hóa. Khi cần bản đồ nhúng, thay `src/config/map.js` bằng provider adapter (Google Maps/Mapbox), đặt key qua biến môi trường public phù hợp và giới hạn quota; không geocode lại mỗi lần render.
 
 ### Thanh toán
 
