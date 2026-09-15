@@ -29,6 +29,7 @@ Các script có sẵn:
 - `src/styles.css` chứa design system và responsive layout mobile-first. Card sản phẩm có badge tồn kho, thông tin biến thể và fallback “Ảnh mẫu” khi URL ảnh lỗi.
 - Shop hỗ trợ `links.website`, `links.facebook`, `links.zalo` tùy chọn; UI chỉ render URL `http/https` hợp lệ và mở bằng `noopener noreferrer`. Mock links dùng `example.com` và gắn nhãn `(demo)`; shop không có link sẽ không hiện nút rỗng. Admin Preview cho phép nhập link để kiểm duyệt trước khi public.
 - Catalog sản phẩm hiển thị theo batch 12 item: nút **Xem thêm** append đồng bộ vào danh sách hiện tại, không reset scroll hay tạo delay giả. Khi đổi tìm kiếm, tỉnh/thành, nguồn, danh mục hoặc shop đang chọn, batch được reset về đầu; khi hết dữ liệu hiển thị “Đã hiển thị tất cả sản phẩm”.
+- Trang public ưu tiên catalog sản phẩm ngay sau hero/search/filter; shop là section thứ cấp bên dưới. Khi từ khóa chỉ khớp shop, catalog báo trạng thái rõ ràng và section shop vẫn hiển thị kết quả. Mỗi product card hiển thị seller shop như link phụ để mở shop detail.
 
 ### Catalog và hình ảnh mẫu
 
