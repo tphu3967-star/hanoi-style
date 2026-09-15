@@ -27,6 +27,7 @@ Các script có sẵn:
 - `marketplaceSource`, `sourceLabel` và `outboundUrl` trên product là metadata **marketplace mẫu**. Catalog hiện có nhiều fixture tổng hợp theo Shopee/TikTok Shop, nhưng không phải listing live.
 - `src/App.jsx` chứa các luồng browsing chính: tìm kiếm, lọc danh mục, lưu shop, xem chi tiết shop/sản phẩm, CTA gọi điện/Zalo/chỉ đường, xin quyền geolocation và Admin Preview.
 - `src/styles.css` chứa design system và responsive layout mobile-first. Card sản phẩm có badge tồn kho, thông tin biến thể và fallback “Ảnh mẫu” khi URL ảnh lỗi.
+- Catalog sản phẩm hiển thị theo batch 12 item: nút **Xem thêm** append đồng bộ vào danh sách hiện tại, không reset scroll hay tạo delay giả. Khi đổi tìm kiếm, tỉnh/thành, nguồn, danh mục hoặc shop đang chọn, batch được reset về đầu; khi hết dữ liệu hiển thị “Đã hiển thị tất cả sản phẩm”.
 
 ### Catalog và hình ảnh mẫu
 
