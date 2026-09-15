@@ -21,12 +21,28 @@ Các script có sẵn:
 
 - `src/data/mockData.js` chứa fixture công khai gồm nhiều shop Hà Nội, sản phẩm, biến thể size/màu và số lượng mẫu; `src/data/catalogStore.js` là store boundary với các action `upsertShop`, `upsertProduct`, `setShopVerification`. Admin Preview dùng boundary này để mô phỏng quản lý dữ liệu trong memory, không ghi database.
 - `src/utils/location.js` chứa Haversine helper, format khoảng cách và link chỉ đường. `src/config/map.js` là cấu hình provider; hiện dùng Google Maps directions link không cần API key và không nhúng tile/bản đồ thật.
+- `src/integrations/catalogAdapter.js` định nghĩa schema chuẩn hóa có validation cho shop, product, inventory và adapter contract (`fetchProducts`, `mapProduct`, `syncInventory`, `reportErrors`). `createMockCatalogAdapter` chỉ chạy preview trên mock data, không gọi network.
 - `src/App.jsx` chứa các luồng browsing chính: tìm kiếm, lọc danh mục, lưu shop, xem chi tiết shop/sản phẩm, CTA gọi điện/Zalo/chỉ đường, xin quyền geolocation và Admin Preview.
 - `src/styles.css` chứa design system và responsive layout mobile-first. Card sản phẩm có badge tồn kho, thông tin biến thể và fallback “Ảnh mẫu” khi URL ảnh lỗi.
 
 ### Catalog và hình ảnh mẫu
 
 Toàn bộ shop, sản phẩm, giá, biến thể và số lượng trong MVP là **dữ liệu demo**, không phải inventory thực tế. URL ảnh hiện là ảnh mẫu từ Unsplash dùng để hoàn thiện UI; chúng không được thu thập từ website shop, không ngụ ý thuộc về shop nào và không phải ảnh hàng hóa thật của các shop trong fixture. Khi phát hành production, thay từng `image`/`imageAlt` bằng ảnh do shop cung cấp với quyền sử dụng rõ ràng (hoặc CDN nội bộ), giữ lại `imageAlt`, trạng thái tải lỗi và kiểm duyệt nội dung trước khi public.
+
+### Product automation adapters
+
+Admin Preview có panel **Đồng bộ sản phẩm & tồn kho**. Nút `Chạy sync preview` chạy mock adapter trong memory, validate/mapping toàn bộ sản phẩm, tính trạng thái tồn kho và hiển thị `fetched / mapped / inventory updated`, thời gian chạy và lỗi. Đây không phải live sync và không gửi request ra ngoài.
+
+Backend production nên implement cùng contract trong `src/integrations/catalogAdapter.js` theo từng provider:
+
+| Provider | Adapter implementation |
+| --- | --- |
+| WooCommerce | REST API với consumer key/secret, map product/variation và stock quantity |
+| Shopify | Admin GraphQL/REST API, map variant inventory levels |
+| Haravan | API shop/product và tồn kho theo variant |
+| KiotViet | OAuth/token API, map hàng hóa và số lượng theo chi nhánh |
+
+Adapter server-side nên lấy dữ liệu theo cursor/page, normalize qua schema, validate trước khi ghi, dùng idempotency + retry có giới hạn và trả `SyncReport` có lỗi theo từng record. OAuth client secret, refresh token, API key và webhook signing secret phải nằm trong secret manager/backend environment; tuyệt đối không đưa vào Vite bundle, localStorage hay public admin preview. UI chỉ gọi endpoint nội bộ như `POST /admin/sync/products` và nhận report đã được server kiểm soát. Không scraping và không giả lập live integration trong MVP.
 
 ## Lộ trình tích hợp admin & dữ liệu
 
