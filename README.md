@@ -24,12 +24,19 @@ Các script có sẵn:
 - `src/utils/location.js` chứa Haversine helper, format khoảng cách và link chỉ đường. `src/config/map.js` là cấu hình provider; hiện dùng Google Maps directions link không cần API key và không nhúng tile/bản đồ thật.
 - `src/integrations/catalogAdapter.js` định nghĩa schema chuẩn hóa có validation cho shop, product, inventory và adapter contract (`fetchProducts`, `mapProduct`, `syncInventory`, `reportErrors`). `createMockCatalogAdapter` chỉ chạy preview trên mock data, không gọi network.
 - `src/utils/search.js` chuẩn hóa tiếng Việt không dấu, alias quận/huyện và district matching; `src/config/places.js` là boundary provider-agnostic cho Places search. Hiện chỉ tạo Google Maps search/directions links, không gọi Places API.
+- `marketplaceSource`, `sourceLabel` và `outboundUrl` trên product là metadata **marketplace mẫu**. Catalog hiện có nhiều fixture tổng hợp theo Shopee/TikTok Shop, nhưng không phải listing live.
 - `src/App.jsx` chứa các luồng browsing chính: tìm kiếm, lọc danh mục, lưu shop, xem chi tiết shop/sản phẩm, CTA gọi điện/Zalo/chỉ đường, xin quyền geolocation và Admin Preview.
 - `src/styles.css` chứa design system và responsive layout mobile-first. Card sản phẩm có badge tồn kho, thông tin biến thể và fallback “Ảnh mẫu” khi URL ảnh lỗi.
 
 ### Catalog và hình ảnh mẫu
 
 Toàn bộ shop, sản phẩm, giá, biến thể và số lượng trong MVP là **dữ liệu demo**, không phải inventory thực tế. URL ảnh hiện là ảnh mẫu từ Unsplash dùng để hoàn thiện UI; chúng không được thu thập từ website shop, không ngụ ý thuộc về shop nào và không phải ảnh hàng hóa thật của các shop trong fixture. Khi phát hành production, thay từng `image`/`imageAlt` bằng ảnh do shop cung cấp với quyền sử dụng rõ ràng (hoặc CDN nội bộ), giữ lại `imageAlt`, trạng thái tải lỗi và kiểm duyệt nội dung trước khi public.
+
+### Marketplace demo (Shopee / TikTok Shop)
+
+Catalog có các sản phẩm mẫu gắn badge **Shopee** hoặc **TikTok Shop**, bộ lọc nguồn và CTA “Xem nguồn mẫu”. Đây chỉ là dữ liệu minh họa được tạo trong code; URL outbound trỏ tới placeholder `example.com` và CTA bị chặn, không mở listing thật, không xác nhận shop/sản phẩm/tồn kho của bất kỳ marketplace nào. Không có scraping, affiliate tracking hay request tới marketplace trong frontend.
+
+Khi tích hợp thật, backend nên nhận dữ liệu qua **official API**, affiliate/product feed được cấp phép, hoặc link do seller cung cấp và kiểm duyệt. OAuth/API key/access token phải lưu server-side; adapter cần normalize platform, seller, URL được cấp phép, giá, biến thể, tồn kho, ảnh có license và thời điểm đồng bộ trước khi đưa vào catalog public. Cần hiển thị attribution/affiliate disclosure theo điều khoản từng nền tảng và không dùng tên/logo để ngụ ý quan hệ đối tác khi chưa được phép.
 
 ### Tìm kiếm toàn Hà Nội
 

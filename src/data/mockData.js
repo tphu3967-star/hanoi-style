@@ -4,6 +4,10 @@ import { vietnamProvinces, provinceRegions } from './vietnamProvinces'
 const sampleImage = (id, width = 900) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=85`
 
 export const categories = ['Tất cả', 'Váy & đầm', 'Áo kiểu', 'Quần', 'Phụ kiện', 'Đồ công sở']
+export const marketplaceSources = [
+  { id: 'shopee', label: 'Shopee', shortLabel: 'Shopee', tone: 'orange' },
+  { id: 'tiktok-shop', label: 'TikTok Shop', shortLabel: 'TikTok Shop', tone: 'dark' },
+]
 
 export const shops = [
   { id: 'may-studio', name: 'Mây Studio', province: 'Hà Nội', district: 'Hoàn Kiếm', category: 'Váy & đầm', description: 'Nàng thơ hiện đại, nhẹ nhàng nhưng luôn có điểm nhấn.', address: '42 Nhà Chung, Hoàn Kiếm, Hà Nội', phone: '098 765 4321', distance: '0,8 km', priceRange: '350K – 1,2M', rating: '4,9', reviews: 128, verified: true, coordinates: { lat: 21.0287, lng: 105.8498 }, image: sampleImage('photo-1496747611176-843222e1e57c'), imageAlt: 'Trang phục nữ tông be trong studio', accent: 'beige' },
@@ -39,6 +43,9 @@ shops.push(...vietnamProvinces.filter((province) => province !== 'Hà Nội').ma
 const product = (data) => ({
   stockStatus: data.stock > 0 ? data.stock < 4 ? 'Sắp hết' : 'Còn hàng' : 'Hết hàng',
   imageAlt: `Ảnh mẫu sản phẩm ${data.name}, hình minh họa`,
+  marketplaceSource: data.marketplaceSource || 'shopee',
+  sourceLabel: marketplaceSources.find((source) => source.id === (data.marketplaceSource || 'shopee'))?.label || 'Marketplace mẫu',
+  outboundUrl: data.outboundUrl || `https://example.com/hanostyle-demo/${data.id}`,
   variants: [],
   ...data,
 })
@@ -58,16 +65,28 @@ export const products = [
   product({ id: 'p12', shopId: 'gom-fashion', category: 'Váy & đầm', name: 'Váy Hai Dây Hoàng Hôn', price: '740.000đ', stock: 10, variants: [{ name: 'Màu', values: ['Cam đất', 'Nâu'] }, { name: 'Size', values: ['S', 'M', 'L'] }], image: sampleImage('photo-1515372039744-b8f02a3ae446', 700), color: 'terracotta' }),
 ]
 
-products.push(...shops.filter((shop) => shop.province !== 'Hà Nội').map((shop, index) => product({
-  id: `national-p-${index + 1}`,
-  shopId: shop.id,
-  province: shop.province,
-  category: shop.category,
-  name: `Mẫu ${shop.category} ${shop.province}`,
-  price: `${320 + (index % 7) * 70}.000đ`,
-  tag: index % 3 === 0 ? 'Mẫu mới' : '',
-  stock: 2 + (index % 11),
-  variants: [{ name: 'Màu', values: ['Kem', 'Xanh', 'Đen'] }, { name: 'Size', values: ['S', 'M', 'L'] }],
-  image: shop.image.replace('w=900', 'w=700'),
-  color: shop.accent,
-})))
+const marketplaceNames = {
+  'Váy & đầm': ['Đầm Lụa Dạo Phố', 'Váy Hoa Nhẹ Nhàng'],
+  'Áo kiểu': ['Áo Thô Cổ Vuông', 'Áo Voan Tay Bồng'],
+  Quần: ['Quần Linen Ống Rộng', 'Quần Kaki Cạp Cao'],
+  'Phụ kiện': ['Túi Vải Dệt Thủ Công', 'Khuyên Tai Bản Mảnh'],
+  'Đồ công sở': ['Set Áo Gile Thanh Lịch', 'Chân Váy Bút Chì'],
+}
+
+products.push(...shops.filter((shop) => shop.province !== 'Hà Nội').flatMap((shop, index) => {
+  const names = marketplaceNames[shop.category] || marketplaceNames['Áo kiểu']
+  return names.map((name, itemIndex) => product({
+    id: `national-p-${index + 1}-${itemIndex + 1}`,
+    shopId: shop.id,
+    province: shop.province,
+    category: shop.category,
+    name: `${name} ${shop.province}`,
+    price: `${320 + ((index + itemIndex * 2) % 7) * 70}.000đ`,
+    tag: itemIndex === 0 ? 'Mẫu marketplace' : 'Ảnh mẫu',
+    stock: 2 + ((index + itemIndex * 3) % 11),
+    marketplaceSource: (index + itemIndex) % 2 === 0 ? 'shopee' : 'tiktok-shop',
+    variants: [{ name: 'Màu', values: ['Kem', 'Xanh', 'Đen'] }, { name: 'Size', values: ['S', 'M', 'L'] }],
+    image: shop.image.replace('w=900', 'w=700'),
+    color: shop.accent,
+  }))
+}))
