@@ -34,6 +34,8 @@ Toàn bộ shop, sản phẩm, giá, biến thể và số lượng trong MVP l�
 
 Public browsing hỗ trợ tìm theo tên shop, sản phẩm, danh mục, địa chỉ và quận/huyện trên toàn bộ catalog Hà Nội. Search được chuẩn hóa để các cách nhập như `Hoan Kiem`, `Q. Hoàn Kiếm`, `Dong Da` và tiếng Việt có dấu cùng khớp; các chip khu vực giúp lọc nhanh theo Hoàn Kiếm, Đống Đa, Tây Hồ và các khu vực demo khác. Khi không có kết quả, UI hiển thị empty state và vẫn cho mở Google Maps search link. Các tọa độ/district trong fixture là minh họa, không phải directory shop thật.
 
+Khi bấm **Bật vị trí** hoặc chọn **Gần tôi nhất**, trình duyệt sẽ xin quyền geolocation. Nếu được phép, shop đã xác minh được sắp xếp theo khoảng cách Haversine từ gần đến xa; district/search filters vẫn được áp dụng. Nếu bị từ chối hoặc không khả dụng, người dùng vẫn duyệt bình thường, thấy thông báo fallback và sort không chặn nội dung. Vị trí chỉ được giữ trong state của phiên hiện tại, không có background tracking hay request API ngoài.
+
 `src/config/places.js` giữ provider config (`google-places-ready`, `mode: mock-only`) và endpoint tương lai. Production nên để backend gọi Google Places hoặc provider khác, cache/giới hạn quota, normalize kết quả qua schema và trả về UI qua endpoint nội bộ. API key, OAuth/token và secret phải nằm server-side; không đưa vào Vite bundle. MVP không gọi external Places API và không scraping.
 
 ### Product automation adapters
