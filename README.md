@@ -20,6 +20,7 @@ Các script có sẵn:
 ## Kiến trúc MVP
 
 - `src/data/mockData.js` chứa fixture công khai gồm nhiều shop Hà Nội, sản phẩm, biến thể size/màu và số lượng mẫu; `src/data/catalogStore.js` là store boundary với các action `upsertShop`, `upsertProduct`, `setShopVerification`. Admin Preview dùng boundary này để mô phỏng quản lý dữ liệu trong memory, không ghi database.
+- `src/data/vietnamProvinces.js` là taxonomy 63 tỉnh/thành theo scope legacy được yêu cầu cho catalog demo; `mockData.js` tạo fixture tổng hợp có `province`, `region`, tọa độ mẫu và sản phẩm tương ứng cho từng đơn vị.
 - `src/utils/location.js` chứa Haversine helper, format khoảng cách và link chỉ đường. `src/config/map.js` là cấu hình provider; hiện dùng Google Maps directions link không cần API key và không nhúng tile/bản đồ thật.
 - `src/integrations/catalogAdapter.js` định nghĩa schema chuẩn hóa có validation cho shop, product, inventory và adapter contract (`fetchProducts`, `mapProduct`, `syncInventory`, `reportErrors`). `createMockCatalogAdapter` chỉ chạy preview trên mock data, không gọi network.
 - `src/utils/search.js` chuẩn hóa tiếng Việt không dấu, alias quận/huyện và district matching; `src/config/places.js` là boundary provider-agnostic cho Places search. Hiện chỉ tạo Google Maps search/directions links, không gọi Places API.
@@ -37,6 +38,12 @@ Public browsing hỗ trợ tìm theo tên shop, sản phẩm, danh mục, địa
 Khi bấm **Bật vị trí** hoặc chọn **Gần tôi nhất**, trình duyệt sẽ xin quyền geolocation. Nếu được phép, shop đã xác minh được sắp xếp theo khoảng cách Haversine từ gần đến xa; district/search filters vẫn được áp dụng. Nếu bị từ chối hoặc không khả dụng, người dùng vẫn duyệt bình thường, thấy thông báo fallback và sort không chặn nội dung. Vị trí chỉ được giữ trong state của phiên hiện tại, không có background tracking hay request API ngoài.
 
 `src/config/places.js` giữ provider config (`google-places-ready`, `mode: mock-only`) và endpoint tương lai. Production nên để backend gọi Google Places hoặc provider khác, cache/giới hạn quota, normalize kết quả qua schema và trả về UI qua endpoint nội bộ. API key, OAuth/token và secret phải nằm server-side; không đưa vào Vite bundle. MVP không gọi external Places API và không scraping.
+
+### Catalog toàn quốc
+
+MVP có scope selector searchable theo 63 đơn vị tỉnh/thành (kèm shortcut Hà Nội, Hồ Chí Minh, Đà Nẵng, Cần Thơ), chỉ báo phạm vi đang xem và lọc shop/sản phẩm theo `province`. Các fixture ngoài Hà Nội là shop/sản phẩm **tổng hợp hoàn toàn hư cấu**, dùng tên `Nét ...`, địa chỉ/điện thoại/tọa độ/tồn kho mẫu; không đại diện doanh nghiệp, inventory hay coverage thật. Tên 63 đơn vị là taxonomy legacy để phục vụ yêu cầu demo; khi onboarding production cần xác nhận taxonomy hành chính chính thức đang có hiệu lực tại thời điểm triển khai.
+
+Geolocation vẫn sort shop đã xác minh gần nhất trên toàn quốc bằng Haversine khi được cấp quyền; từ chối quyền vẫn cho duyệt và lọc theo tỉnh bình thường. Khi thay mock bằng dữ liệu thật, backend cần bắt buộc `province`, địa chỉ chuẩn hóa, tọa độ đã kiểm duyệt và nguồn/giấy phép ảnh trước khi public.
 
 ### Product automation adapters
 
