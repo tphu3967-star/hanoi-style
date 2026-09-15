@@ -1,10 +1,13 @@
 import { categories, products, shops } from './mockData'
+import { normalizeShopLinks } from '../utils/links'
+
+export { normalizeShopLinks }
 
 // This is the replaceable client-side data boundary. A future API adapter can
 // expose the same shape and move verification/mutations to the server.
 export const createMockCatalog = () => ({
   categories: [...categories],
-  shops: shops.map((shop) => ({ ...shop, coordinates: { ...shop.coordinates } })),
+  shops: shops.map((shop) => ({ ...shop, links: normalizeShopLinks(shop.links), coordinates: { ...shop.coordinates } })),
   products: products.map((product) => ({ ...product })),
 })
 

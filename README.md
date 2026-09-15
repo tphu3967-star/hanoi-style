@@ -27,6 +27,7 @@ Các script có sẵn:
 - `marketplaceSource`, `sourceLabel` và `outboundUrl` trên product là metadata **marketplace mẫu**. Catalog hiện có nhiều fixture tổng hợp theo Shopee/TikTok Shop, nhưng không phải listing live.
 - `src/App.jsx` chứa các luồng browsing chính: tìm kiếm, lọc danh mục, lưu shop, xem chi tiết shop/sản phẩm, CTA gọi điện/Zalo/chỉ đường, xin quyền geolocation và Admin Preview.
 - `src/styles.css` chứa design system và responsive layout mobile-first. Card sản phẩm có badge tồn kho, thông tin biến thể và fallback “Ảnh mẫu” khi URL ảnh lỗi.
+- Shop hỗ trợ `links.website`, `links.facebook`, `links.zalo` tùy chọn; UI chỉ render URL `http/https` hợp lệ và mở bằng `noopener noreferrer`. Mock links dùng `example.com` và gắn nhãn `(demo)`; shop không có link sẽ không hiện nút rỗng. Admin Preview cho phép nhập link để kiểm duyệt trước khi public.
 - Catalog sản phẩm hiển thị theo batch 12 item: nút **Xem thêm** append đồng bộ vào danh sách hiện tại, không reset scroll hay tạo delay giả. Khi đổi tìm kiếm, tỉnh/thành, nguồn, danh mục hoặc shop đang chọn, batch được reset về đầu; khi hết dữ liệu hiển thị “Đã hiển thị tất cả sản phẩm”.
 
 ### Catalog và hình ảnh mẫu
@@ -38,6 +39,10 @@ Toàn bộ shop, sản phẩm, giá, biến thể và số lượng trong MVP l�
 Catalog có các sản phẩm mẫu gắn badge **Shopee** hoặc **TikTok Shop**, bộ lọc nguồn và CTA “Xem nguồn mẫu”. Đây chỉ là dữ liệu minh họa được tạo trong code; URL outbound trỏ tới placeholder `example.com` và CTA bị chặn, không mở listing thật, không xác nhận shop/sản phẩm/tồn kho của bất kỳ marketplace nào. Không có scraping, affiliate tracking hay request tới marketplace trong frontend.
 
 Khi tích hợp thật, backend nên nhận dữ liệu qua **official API**, affiliate/product feed được cấp phép, hoặc link do seller cung cấp và kiểm duyệt. OAuth/API key/access token phải lưu server-side; adapter cần normalize platform, seller, URL được cấp phép, giá, biến thể, tồn kho, ảnh có license và thời điểm đồng bộ trước khi đưa vào catalog public. Cần hiển thị attribution/affiliate disclosure theo điều khoản từng nền tảng và không dùng tên/logo để ngụ ý quan hệ đối tác khi chưa được phép.
+
+### Link liên hệ shop
+
+Website, Facebook và Zalo là các trường optional trong normalized shop model. Production chỉ nên public link do chủ shop cung cấp và đã kiểm duyệt; không tự suy ra URL từ tên shop, không tạo link giả và không nhúng secret. Google Maps directions/search vẫn là boundary riêng, không phải link shop đã xác minh.
 
 ### Tìm kiếm toàn Hà Nội
 

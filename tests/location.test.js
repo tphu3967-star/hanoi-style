@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { haversineDistanceKm, resolveProvinceFromLocation } from '../src/utils/location.js'
+import { normalizeShopLinks } from '../src/utils/links.js'
 
 test('Haversine returns zero for the same coordinate', () => {
   assert.equal(haversineDistanceKm({ lat: 21.0287, lng: 105.8498 }, { lat: 21.0287, lng: 105.8498 }), 0)
@@ -26,4 +27,12 @@ test('reverse-geocoder boundary accepts provider results for known city coordina
     const result = resolveProvinceFromLocation(coordinate, () => ({ province, status: 'resolved', source: 'test-provider' }))
     assert.deepEqual(result, { province, status: 'resolved', source: 'test-provider' })
   }
+})
+
+test('shop links keep only valid web URLs', () => {
+  assert.deepEqual(normalizeShopLinks({
+    website: 'https://example.com/shop',
+    facebook: 'javascript:alert(1)',
+    zalo: 'not-a-url',
+  }), { website: 'https://example.com/shop' })
 })

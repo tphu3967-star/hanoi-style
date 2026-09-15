@@ -2,7 +2,7 @@
  * Platform-neutral normalized catalog contract.
  * Keep provider credentials and network calls in a server-side adapter.
  *
- * @typedef {{id:string,name:string,address:string,phone:string,category:string,verified:boolean,coordinates:{lat:number,lng:number},image:string,imageAlt:string}} NormalizedShop
+ * @typedef {{id:string,name:string,address:string,phone:string,category:string,verified:boolean,coordinates:{lat:number,lng:number},image:string,imageAlt:string,links?:{website?:string,facebook?:string,zalo?:string}}} NormalizedShop
  * @typedef {{id:string,shopId:string,name:string,category:string,price:string,stock:number,stockStatus:string,variants:Array<{name:string,values:string[]}>,image:string,imageAlt:string}} NormalizedProduct
  * @typedef {{productId:string,quantity:number,status:'in_stock'|'low_stock'|'out_of_stock'}} NormalizedInventory
  * @typedef {{provider:string,startedAt:string,finishedAt:string,status:'success'|'partial'|'error',productsFetched:number,productsMapped:number,inventoryUpdated:number,errors:string[],preview:boolean}} SyncReport
