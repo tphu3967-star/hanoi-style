@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { catalogActions, createMockCatalog } from './data/catalogStore'
 import { MAP_CONFIG } from './config/map'
-import { createDirectionsUrl, formatDistance, haversineDistanceKm } from './utils/location'
+import { createDirectionsUrl, detectNearestCatalogProvince, formatDistance, haversineDistanceKm } from './utils/location'
 import { createMockCatalogAdapter, runCatalogSync } from './integrations/catalogAdapter'
 import { PLACES_CONFIG, createPlacesSearchUrl } from './config/places'
 import { getShopDistrict, hanoiDistricts, matchesHanoiText } from './utils/search'
@@ -22,6 +22,10 @@ function App() {
   const [activeDistrict, setActiveDistrict] = useState('Tất cả khu vực')
   const [sortMode, setSortMode] = useState('default')
   const [activeProvince, setActiveProvince] = useState('Tất cả Việt Nam')
+  const [locationScope, setLocationScope] = useState(null)
+  useEffect(() => {
+    if (locationScope && activeProvince !== locationScope.province) setLocationScope(null)
+  }, [activeProvince, locationScope])
 
   const visibleShops = catalog.shops.filter((shop) => shop.verified)
   const filteredShops = useMemo(() => {
@@ -51,13 +55,34 @@ function App() {
 
   const requestLocation = () => {
     if (!navigator.geolocation) {
+      setUserLocation(null)
+      setLocationScope(null)
+      setActiveProvince('Tất cả Việt Nam')
+      setActiveDistrict('Tất cả khu vực')
+      setSortMode('default')
       setLocationStatus('unavailable')
       return
     }
     setLocationStatus('loading')
     navigator.geolocation.getCurrentPosition(
-      ({ coords }) => { setUserLocation({ lat: coords.latitude, lng: coords.longitude }); setSortMode('nearest'); setLocationStatus('success') },
-      (error) => setLocationStatus(error.code === error.PERMISSION_DENIED ? 'denied' : 'unavailable'),
+      ({ coords }) => {
+        const nextLocation = { lat: coords.latitude, lng: coords.longitude }
+        const detected = detectNearestCatalogProvince(nextLocation, catalog.shops)
+        setUserLocation(nextLocation)
+        setLocationScope(detected)
+        setActiveProvince(detected.province || 'Tất cả Việt Nam')
+        setActiveDistrict(detected.province === 'Hà Nội' ? activeDistrict : 'Tất cả khu vực')
+        setSortMode('nearest')
+        setLocationStatus('success')
+      },
+      (error) => {
+        setUserLocation(null)
+        setLocationScope(null)
+        setActiveProvince('Tất cả Việt Nam')
+        setActiveDistrict('Tất cả khu vực')
+        setSortMode('default')
+        setLocationStatus(error.code === error.PERMISSION_DENIED ? 'denied' : 'unavailable')
+      },
       { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 },
     )
   }
@@ -75,7 +100,7 @@ function App() {
       </header>
       <main>
         <section className="hero"><div className="hero-copy"><p className="eyebrow"><span className="spark">✦</span> Local fashion, local love</p><h1>Mặc chất<br /><em>Hà Nội.</em></h1><p className="hero-intro">Tìm những cửa hàng thời trang nữ hay ho nhất quanh bạn — từ những con phố thân quen đến góc nhỏ chưa từng biết.</p><div className="search-box"><Icon size={20}>⌕</Icon><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Bạn đang tìm gì hôm nay?" aria-label="Tìm kiếm cửa hàng hoặc sản phẩm" />{query && <button className="clear-search" onClick={() => setQuery('')} aria-label="Xóa tìm kiếm">×</button>}<button className="search-submit" onClick={() => scrollTo('shops')}>Tìm kiếm</button></div><div className="quick-search"><span>Tìm kiếm phổ biến</span><button onClick={() => setQuery('váy')}>váy đi tiệc</button><button onClick={() => setQuery('công sở')}>đồ công sở</button><button onClick={() => setQuery('phụ kiện')}>phụ kiện</button></div><p className="demo-note">✦ Dữ liệu và hình ảnh hiện là mẫu minh họa, không đại diện tồn kho thực tế.</p></div><div className="hero-art"><div className="hero-image-wrap"><ImageWithFallback src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1100&q=85" alt="Thời trang nữ phong cách Hà Nội, ảnh mẫu" /></div><div className="hero-note note-one"><strong>{visibleShops.length}</strong><span>shop local<br />đã tuyển chọn</span></div><div className="hero-note note-two"><span className="mini-avatar">♡</span><span>Được yêu thích<br /><strong>bởi 2.000+ nàng</strong></span></div></div></section>
-        <section className="section discover-section" id="shops"><div className="section-heading"><div><p className="eyebrow">Chọn phạm vi khám phá</p><h2>Shop thời trang khắp Việt Nam</h2></div><button className="text-link" onClick={() => { setActiveCategory('Tất cả'); setActiveDistrict('Tất cả khu vực'); setActiveProvince('Tất cả Việt Nam'); setQuery(''); scrollTo('shops') }}>Xem tất cả <span>→</span></button></div><div className="scope-controls"><label>Địa điểm<select value={activeProvince} onChange={(event) => { setActiveProvince(event.target.value); if (event.target.value !== 'Hà Nội') setActiveDistrict('Tất cả khu vực') }} aria-label="Lọc theo tỉnh thành"><option>Tất cả Việt Nam</option>{vietnamProvinces.map((province) => <option key={province}>{province}</option>)}</select></label><div className="popular-provinces"><span>Gợi ý</span>{['Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Cần Thơ'].map((province) => <button key={province} className={activeProvince === province ? 'active' : ''} onClick={() => { setActiveProvince(province); if (province !== 'Hà Nội') setActiveDistrict('Tất cả khu vực') }}>{province}</button>)}</div></div><div className="category-row" aria-label="Danh mục">{catalog.categories.map((category) => <button key={category} className={`category-chip ${activeCategory === category ? 'active' : ''}`} onClick={() => setActiveCategory(category)}>{category}</button>)}</div>{activeProvince === 'Hà Nội' && <div className="district-row" aria-label="Khu vực Hà Nội">{hanoiDistricts.map((district) => <button key={district} className={`district-chip ${activeDistrict === district ? 'active' : ''}`} onClick={() => setActiveDistrict(district)}>{district}</button>)}</div>}<LocationNotice status={locationStatus} onRequest={requestLocation} /><div className="scope-indicator">Đang xem: <strong>{activeProvince}</strong> · {filteredShops.length} shop demo · {visibleProducts.length} sản phẩm demo</div><div className="search-context"><label className="sort-control">Sắp xếp<select value={sortMode} onChange={(event) => { if (event.target.value === 'nearest' && !userLocation) requestLocation(); setSortMode(event.target.value) }} aria-label="Sắp xếp cửa hàng"><option value="default">Đề xuất</option><option value="nearest">Gần tôi nhất</option></select></label><a href={createPlacesSearchUrl(query || (activeProvince === 'Tất cả Việt Nam' ? 'thời trang nữ' : `shop thời trang nữ ${activeProvince}`))} target="_blank" rel="noreferrer">Mở tìm kiếm khu vực trên Google Maps ↗</a><small>Places provider: {PLACES_CONFIG.mode}</small></div><div className="shop-grid">{filteredShops.map((shop) => <ShopCard key={shop.id} shop={shop} distance={distanceFor(shop)} favorite={favorites.includes(shop.id)} onFavorite={() => toggleFavorite(shop.id)} onSelect={() => setSelectedShop(shop)} onDirections={() => window.open(createDirectionsUrl(shop, userLocation), '_blank', 'noopener,noreferrer')} onMapSearch={() => window.open(createPlacesSearchUrl(`${shop.name}, ${shop.address}`), '_blank', 'noopener,noreferrer')} />)}</div>{!filteredShops.length && <div className="empty-state"><span>◌</span><h3>Chưa tìm thấy shop trong phạm vi này</h3><p>Thử tỉnh/thành, tên shop, sản phẩm khác hoặc mở rộng về tất cả Việt Nam.</p><button onClick={() => { setQuery(''); setActiveCategory('Tất cả'); setActiveDistrict('Tất cả khu vực'); setActiveProvince('Tất cả Việt Nam') }}>Xem toàn quốc</button></div>}</section>
+        <section className="section discover-section" id="shops"><div className="section-heading"><div><p className="eyebrow">Chọn phạm vi khám phá</p><h2>Shop thời trang khắp Việt Nam</h2></div><button className="text-link" onClick={() => { setActiveCategory('Tất cả'); setActiveDistrict('Tất cả khu vực'); setActiveProvince('Tất cả Việt Nam'); setQuery(''); scrollTo('shops') }}>Xem tất cả <span>→</span></button></div><div className="scope-controls"><label>Địa điểm<select value={activeProvince} onChange={(event) => { setActiveProvince(event.target.value); if (event.target.value !== 'Hà Nội') setActiveDistrict('Tất cả khu vực') }} aria-label="Lọc theo tỉnh thành"><option>Tất cả Việt Nam</option>{vietnamProvinces.map((province) => <option key={province}>{province}</option>)}</select></label><div className="popular-provinces"><span>Gợi ý</span>{['Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Cần Thơ'].map((province) => <button key={province} className={activeProvince === province ? 'active' : ''} onClick={() => { setActiveProvince(province); if (province !== 'Hà Nội') setActiveDistrict('Tất cả khu vực') }}>{province}</button>)}</div></div><div className="category-row" aria-label="Danh mục">{catalog.categories.map((category) => <button key={category} className={`category-chip ${activeCategory === category ? 'active' : ''}`} onClick={() => setActiveCategory(category)}>{category}</button>)}</div>{activeProvince === 'Hà Nội' && <div className="district-row" aria-label="Khu vực Hà Nội">{hanoiDistricts.map((district) => <button key={district} className={`district-chip ${activeDistrict === district ? 'active' : ''}`} onClick={() => setActiveDistrict(district)}>{district}</button>)}</div>}        <LocationNotice status={locationStatus} detectedProvince={locationScope?.province} onRequest={requestLocation} />        <div className="scope-indicator">Đang xem sản phẩm tại <strong>{activeProvince}</strong> · {filteredShops.length} shop demo · {visibleProducts.length} sản phẩm demo {activeProvince !== 'Tất cả Việt Nam' && <button onClick={() => { setActiveProvince('Tất cả Việt Nam'); setActiveDistrict('Tất cả khu vực'); setLocationScope(null) }}>Bỏ giới hạn vị trí</button>}</div><div className="search-context"><label className="sort-control">Sắp xếp<select value={sortMode} onChange={(event) => { if (event.target.value === 'nearest' && !userLocation) requestLocation(); setSortMode(event.target.value) }} aria-label="Sắp xếp cửa hàng"><option value="default">Đề xuất</option><option value="nearest">Gần tôi nhất</option></select></label><a href={createPlacesSearchUrl(query || (activeProvince === 'Tất cả Việt Nam' ? 'thời trang nữ' : `shop thời trang nữ ${activeProvince}`))} target="_blank" rel="noreferrer">Mở tìm kiếm khu vực trên Google Maps ↗</a><small>Places provider: {PLACES_CONFIG.mode}</small></div><div className="shop-grid">{filteredShops.map((shop) => <ShopCard key={shop.id} shop={shop} distance={distanceFor(shop)} favorite={favorites.includes(shop.id)} onFavorite={() => toggleFavorite(shop.id)} onSelect={() => setSelectedShop(shop)} onDirections={() => window.open(createDirectionsUrl(shop, userLocation), '_blank', 'noopener,noreferrer')} onMapSearch={() => window.open(createPlacesSearchUrl(`${shop.name}, ${shop.address}`), '_blank', 'noopener,noreferrer')} />)}</div>{!filteredShops.length && <div className="empty-state"><span>◌</span><h3>Chưa tìm thấy shop trong phạm vi này</h3><p>Thử tỉnh/thành, tên shop, sản phẩm khác hoặc mở rộng về tất cả Việt Nam.</p><button onClick={() => { setQuery(''); setActiveCategory('Tất cả'); setActiveDistrict('Tất cả khu vực'); setActiveProvince('Tất cả Việt Nam') }}>Xem toàn quốc</button></div>}</section>
         <section className="section product-section" id="products"><div className="section-heading"><div><p className="eyebrow">Món mới mỗi ngày</p><h2>Đang được yêu thích</h2><p className="section-caption">{visibleProducts.length} sản phẩm mẫu · ảnh minh họa từ Unsplash</p></div><button className="text-link">Xem thêm <span>→</span></button></div>{visibleProducts.length ? <div className="product-grid">{visibleProducts.map((product) => <ProductCard key={product.id} product={product} onSelect={() => setSelectedProduct(product)} />)}</div> : <div className="empty-state"><span>◌</span><h3>Chưa tìm thấy sản phẩm</h3><p>Thử từ khóa hoặc danh mục khác nhé.</p></div>}</section>
         <section className="about-banner" id="about"><div className="about-mark">H</div><div><p className="eyebrow">Một Hà Nội rất riêng</p><h2>Đi tìm cái đẹp<br /><em>ở ngay quanh mình.</em></h2></div><p>HaNoiStyle kết nối bạn với những người làm thời trang tử tế — để mỗi lần mua sắm là một lần khám phá thành phố theo cách thật riêng.</p><button className="outline-button">Câu chuyện của chúng mình <span>→</span></button></section>
       </main>
@@ -86,10 +111,10 @@ function App() {
   )
 }
 
-function LocationNotice({ status, onRequest }) {
-  if (status === 'success') return <div className="location-notice success" role="status"><Icon>✓</Icon><span>Đã cập nhật khoảng cách và đang ưu tiên shop gần bạn. <small>Vị trí chỉ dùng trong phiên này, không theo dõi nền.</small></span><button onClick={onRequest}>Cập nhật lại</button></div>
+function LocationNotice({ status, detectedProvince, onRequest }) {
+  if (status === 'success') return <div className="location-notice success" role="status"><Icon>✓</Icon><span>Đang xem sản phẩm tại <b>{detectedProvince || 'phạm vi gần bạn'}</b> (ước tính demo từ catalog), đồng thời ưu tiên shop gần bạn. <small>Không phải reverse-geocoding chính xác; vị trí chỉ dùng trong phiên này.</small></span><button onClick={onRequest}>Cập nhật lại</button></div>
   if (status === 'loading') return <div className="location-notice" role="status"><span className="loading-dot" /> Đang xin quyền truy cập vị trí…</div>
-  if (status === 'denied') return <div className="location-notice warning" role="status"><Icon>!</Icon><span>Bạn đã từ chối quyền vị trí. Vẫn có thể duyệt toàn Hà Nội; khoảng cách dùng dữ liệu khu vực mẫu. <small>Không có theo dõi nền.</small></span><button onClick={onRequest}>Thử lại</button></div>
+  if (status === 'denied') return <div className="location-notice warning" role="status"><Icon>!</Icon><span>Bạn đã từ chối quyền vị trí. Đang hiển thị toàn bộ sản phẩm Việt Nam; bạn có thể chọn tỉnh thủ công. <small>Không có theo dõi nền.</small></span><button onClick={onRequest}>Thử lại</button></div>
   if (status === 'unavailable') return <div className="location-notice warning" role="status"><Icon>!</Icon> Không thể truy cập vị trí trên thiết bị này. Bạn vẫn có thể xem shop và mở chỉ đường. <button onClick={onRequest}>Thử lại</button></div>
   return <div className="location-notice"><Icon>⌖</Icon><span>Cho phép vị trí để xem khoảng cách chính xác và sắp xếp shop gần bạn. <small>Chỉ dùng khi bạn bấm cho phép, không theo dõi nền.</small></span><button onClick={onRequest}>Bật vị trí</button></div>
 }

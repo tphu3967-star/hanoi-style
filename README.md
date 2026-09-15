@@ -37,6 +37,8 @@ Public browsing hỗ trợ tìm theo tên shop, sản phẩm, danh mục, địa
 
 Khi bấm **Bật vị trí** hoặc chọn **Gần tôi nhất**, trình duyệt sẽ xin quyền geolocation. Nếu được phép, shop đã xác minh được sắp xếp theo khoảng cách Haversine từ gần đến xa; district/search filters vẫn được áp dụng. Nếu bị từ chối hoặc không khả dụng, người dùng vẫn duyệt bình thường, thấy thông báo fallback và sort không chặn nội dung. Vị trí chỉ được giữ trong state của phiên hiện tại, không có background tracking hay request API ngoài.
 
+Khi geolocation thành công, MVP dùng **demo nearest-catalog mapping**: tìm shop fixture có tọa độ gần nhất rồi lấy `province` của shop đó để chọn scope. Đây không phải reverse-geocoding và không tuyên bố độ chính xác hành chính, đặc biệt với vị trí ngoài vùng có fixture; thông báo UI luôn ghi rõ là ước tính demo. Người dùng có thể chọn lại tỉnh/thành bằng select (lựa chọn thủ công sẽ bỏ detected scope), hoặc chọn `Tất cả Việt Nam` để xóa giới hạn và xem toàn bộ sản phẩm. Production cần thay boundary này bằng reverse-geocoding adapter có nguồn/provider được kiểm duyệt.
+
 `src/config/places.js` giữ provider config (`google-places-ready`, `mode: mock-only`) và endpoint tương lai. Production nên để backend gọi Google Places hoặc provider khác, cache/giới hạn quota, normalize kết quả qua schema và trả về UI qua endpoint nội bộ. API key, OAuth/token và secret phải nằm server-side; không đưa vào Vite bundle. MVP không gọi external Places API và không scraping.
 
 ### Catalog toàn quốc
