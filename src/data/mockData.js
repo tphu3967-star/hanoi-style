@@ -1,0 +1,57 @@
+// Mock catalog boundary: replace this module with API hooks when backend is available.
+export const categories = ['Tất cả', 'Váy & đầm', 'Áo kiểu', 'Quần', 'Phụ kiện', 'Đồ công sở']
+
+export const shops = [
+  {
+    id: 'may-studio',
+    name: 'Mây Studio',
+    category: 'Váy & đầm',
+    description: 'Nàng thơ hiện đại, nhẹ nhàng nhưng luôn có điểm nhấn.',
+    address: '42 Nhà Chung, Hoàn Kiếm, Hà Nội',
+    phone: '098 765 4321',
+    distance: '0,8 km',
+    priceRange: '350K – 1,2M',
+    rating: '4,9',
+    reviews: 128,
+    verified: true,
+    image: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=85',
+    accent: 'beige',
+  },
+  {
+    id: 'nang-tho',
+    name: 'Nàng Thơ',
+    category: 'Đồ công sở',
+    description: 'Đi làm thanh lịch, đi chơi vẫn thật là mình.',
+    address: '18 Trần Quốc Toản, Hoàn Kiếm, Hà Nội',
+    phone: '091 234 5678',
+    distance: '1,4 km',
+    priceRange: '280K – 890K',
+    rating: '4,8',
+    reviews: 96,
+    verified: true,
+    image: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=900&q=85',
+    accent: 'lilac',
+  },
+  {
+    id: 'tiem-nha-bom',
+    name: 'Tiệm Nhà Bơm',
+    category: 'Áo kiểu',
+    description: 'Những món đồ nhỏ xinh cho ngày thường thêm vui.',
+    address: '7 Ngõ Tràng Tiền, Hoàn Kiếm, Hà Nội',
+    phone: '097 556 7788',
+    distance: '2,1 km',
+    priceRange: '190K – 650K',
+    rating: '4,7',
+    reviews: 74,
+    verified: true,
+    image: 'https://images.unsplash.com/photo-1506629905607-d9ccf2a6e6a6?auto=format&fit=crop&w=900&q=85',
+    accent: 'blue',
+  },
+]
+
+export const products = [
+  { id: 'p1', shopId: 'may-studio', name: 'Váy Linen Nắng Mai', price: '690.000đ', oldPrice: '820.000đ', tag: 'Bán chạy', image: 'https://images.unsplash.com/photo-1496217590455-aa63a8350eea?auto=format&fit=crop&w=700&q=85', color: 'beige' },
+  { id: 'p2', shopId: 'nang-tho', name: 'Áo Sơ Mi Mộc Miên', price: '420.000đ', tag: 'Mới về', image: 'https://images.unsplash.com/photo-1605763240000-7e93b172d754?auto=format&fit=crop&w=700&q=85', color: 'lilac' },
+  { id: 'p3', shopId: 'may-studio', name: 'Chân Váy Midi Hạ', price: '550.000đ', image: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=700&q=85', color: 'blue' },
+  { id: 'p4', shopId: 'tiem-nha-bom', name: 'Áo Peplum Cúc Ngọc', price: '390.000đ', image: 'https://images.unsplash.com/photo-1564257577054-2e7f8d50b3b3?auto=format&fit=crop&w=700&q=85', color: 'rose' },
+]
