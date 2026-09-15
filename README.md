@@ -37,7 +37,7 @@ Public browsing hỗ trợ tìm theo tên shop, sản phẩm, danh mục, địa
 
 Khi bấm **Bật vị trí** hoặc chọn **Gần tôi nhất**, trình duyệt sẽ xin quyền geolocation. Nếu được phép, shop đã xác minh được sắp xếp theo khoảng cách Haversine từ gần đến xa; district/search filters vẫn được áp dụng. Nếu bị từ chối hoặc không khả dụng, người dùng vẫn duyệt bình thường, thấy thông báo fallback và sort không chặn nội dung. Vị trí chỉ được giữ trong state của phiên hiện tại, không có background tracking hay request API ngoài.
 
-Khi geolocation thành công, MVP dùng **demo nearest-catalog mapping**: tìm shop fixture có tọa độ gần nhất rồi lấy `province` của shop đó để chọn scope. Đây không phải reverse-geocoding và không tuyên bố độ chính xác hành chính, đặc biệt với vị trí ngoài vùng có fixture; thông báo UI luôn ghi rõ là ước tính demo. Người dùng có thể chọn lại tỉnh/thành bằng select (lựa chọn thủ công sẽ bỏ detected scope), hoặc chọn `Tất cả Việt Nam` để xóa giới hạn và xem toàn bộ sản phẩm. Production cần thay boundary này bằng reverse-geocoding adapter có nguồn/provider được kiểm duyệt.
+Geolocation thành công **không tự suy ra tỉnh/thành từ shop gần nhất**. `resolveProvinceFromLocation` là reverse-geocoding boundary; trong demo không cấu hình provider nên trả về trạng thái `unresolved`, giữ phạm vi `Tất cả Việt Nam` và yêu cầu chọn tỉnh thủ công nếu muốn lọc theo tỉnh. Điều này tránh hiển thị sai tỉnh ở ranh giới hành chính hoặc nơi catalog thưa. Production cần nối boundary này với reverse-geocoding server-side có nguồn/provider được kiểm duyệt, kèm test tọa độ thuộc nhiều tỉnh; không đưa API key vào frontend.
 
 `src/config/places.js` giữ provider config (`google-places-ready`, `mode: mock-only`) và endpoint tương lai. Production nên để backend gọi Google Places hoặc provider khác, cache/giới hạn quota, normalize kết quả qua schema và trả về UI qua endpoint nội bộ. API key, OAuth/token và secret phải nằm server-side; không đưa vào Vite bundle. MVP không gọi external Places API và không scraping.
 
@@ -45,7 +45,7 @@ Khi geolocation thành công, MVP dùng **demo nearest-catalog mapping**: tìm s
 
 MVP có scope selector searchable theo 63 đơn vị tỉnh/thành (kèm shortcut Hà Nội, Hồ Chí Minh, Đà Nẵng, Cần Thơ), chỉ báo phạm vi đang xem và lọc shop/sản phẩm theo `province`. Các fixture ngoài Hà Nội là shop/sản phẩm **tổng hợp hoàn toàn hư cấu**, dùng tên `Nét ...`, địa chỉ/điện thoại/tọa độ/tồn kho mẫu; không đại diện doanh nghiệp, inventory hay coverage thật. Tên 63 đơn vị là taxonomy legacy để phục vụ yêu cầu demo; khi onboarding production cần xác nhận taxonomy hành chính chính thức đang có hiệu lực tại thời điểm triển khai.
 
-Geolocation vẫn sort shop đã xác minh gần nhất trên toàn quốc bằng Haversine khi được cấp quyền; từ chối quyền vẫn cho duyệt và lọc theo tỉnh bình thường. Khi thay mock bằng dữ liệu thật, backend cần bắt buộc `province`, địa chỉ chuẩn hóa, tọa độ đã kiểm duyệt và nguồn/giấy phép ảnh trước khi public.
+Geolocation vẫn sort shop đã xác minh gần nhất trên toàn quốc bằng Haversine khi được cấp quyền; từ chối quyền vẫn cho duyệt và lọc theo tỉnh bình thường. Vị trí chỉ tồn tại trong phiên, không theo dõi nền. Khi thay mock bằng dữ liệu thật, backend cần bắt buộc `province`, địa chỉ chuẩn hóa, tọa độ đã kiểm duyệt và nguồn/giấy phép ảnh trước khi public.
 
 ### Product automation adapters
 

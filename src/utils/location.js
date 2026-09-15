@@ -14,16 +14,17 @@ export function formatDistance(distanceKm, fallback = 'Khoảng cách chưa có'
   return distanceKm < 1 ? `${Math.round(distanceKm * 1000)} m` : `${distanceKm.toFixed(1).replace('.', ',')} km`
 }
 
-// Demo-only resolver: chooses the nearest existing catalog coordinate and returns
-// its province. It is deliberately not reverse geocoding or claiming boundary precision.
-export function detectNearestCatalogProvince(location, shops) {
-  const candidates = shops.filter((shop) => shop?.province && shop?.coordinates)
-  if (!location || !candidates.length) return { province: null, distanceKm: null, isDemoMapping: true }
-  const nearest = candidates.reduce((best, shop) => {
-    const distanceKm = haversineDistanceKm(location, shop.coordinates)
-    return !best || distanceKm < best.distanceKm ? { province: shop.province, distanceKm } : best
-  }, null)
-  return { ...nearest, isDemoMapping: true }
+// Reverse geocoding is intentionally unresolved in the browser-only demo.
+// Production should inject a server-side provider adapter; never infer a
+// province from the nearest shop or centroid.
+export function resolveProvinceFromLocation(location, reverseGeocoder = null) {
+  if (!location || !Number.isFinite(location.lat) || !Number.isFinite(location.lng)) {
+    return { province: null, status: 'unresolved', reason: 'invalid-location' }
+  }
+  if (typeof reverseGeocoder !== 'function') {
+    return { province: null, status: 'unresolved', reason: 'provider-not-configured' }
+  }
+  return reverseGeocoder(location)
 }
 
 export function createDirectionsUrl(shop, userLocation) {
