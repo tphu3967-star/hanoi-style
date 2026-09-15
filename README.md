@@ -22,12 +22,19 @@ Các script có sẵn:
 - `src/data/mockData.js` chứa fixture công khai gồm nhiều shop Hà Nội, sản phẩm, biến thể size/màu và số lượng mẫu; `src/data/catalogStore.js` là store boundary với các action `upsertShop`, `upsertProduct`, `setShopVerification`. Admin Preview dùng boundary này để mô phỏng quản lý dữ liệu trong memory, không ghi database.
 - `src/utils/location.js` chứa Haversine helper, format khoảng cách và link chỉ đường. `src/config/map.js` là cấu hình provider; hiện dùng Google Maps directions link không cần API key và không nhúng tile/bản đồ thật.
 - `src/integrations/catalogAdapter.js` định nghĩa schema chuẩn hóa có validation cho shop, product, inventory và adapter contract (`fetchProducts`, `mapProduct`, `syncInventory`, `reportErrors`). `createMockCatalogAdapter` chỉ chạy preview trên mock data, không gọi network.
+- `src/utils/search.js` chuẩn hóa tiếng Việt không dấu, alias quận/huyện và district matching; `src/config/places.js` là boundary provider-agnostic cho Places search. Hiện chỉ tạo Google Maps search/directions links, không gọi Places API.
 - `src/App.jsx` chứa các luồng browsing chính: tìm kiếm, lọc danh mục, lưu shop, xem chi tiết shop/sản phẩm, CTA gọi điện/Zalo/chỉ đường, xin quyền geolocation và Admin Preview.
 - `src/styles.css` chứa design system và responsive layout mobile-first. Card sản phẩm có badge tồn kho, thông tin biến thể và fallback “Ảnh mẫu” khi URL ảnh lỗi.
 
 ### Catalog và hình ảnh mẫu
 
 Toàn bộ shop, sản phẩm, giá, biến thể và số lượng trong MVP là **dữ liệu demo**, không phải inventory thực tế. URL ảnh hiện là ảnh mẫu từ Unsplash dùng để hoàn thiện UI; chúng không được thu thập từ website shop, không ngụ ý thuộc về shop nào và không phải ảnh hàng hóa thật của các shop trong fixture. Khi phát hành production, thay từng `image`/`imageAlt` bằng ảnh do shop cung cấp với quyền sử dụng rõ ràng (hoặc CDN nội bộ), giữ lại `imageAlt`, trạng thái tải lỗi và kiểm duyệt nội dung trước khi public.
+
+### Tìm kiếm toàn Hà Nội
+
+Public browsing hỗ trợ tìm theo tên shop, sản phẩm, danh mục, địa chỉ và quận/huyện trên toàn bộ catalog Hà Nội. Search được chuẩn hóa để các cách nhập như `Hoan Kiem`, `Q. Hoàn Kiếm`, `Dong Da` và tiếng Việt có dấu cùng khớp; các chip khu vực giúp lọc nhanh theo Hoàn Kiếm, Đống Đa, Tây Hồ và các khu vực demo khác. Khi không có kết quả, UI hiển thị empty state và vẫn cho mở Google Maps search link. Các tọa độ/district trong fixture là minh họa, không phải directory shop thật.
+
+`src/config/places.js` giữ provider config (`google-places-ready`, `mode: mock-only`) và endpoint tương lai. Production nên để backend gọi Google Places hoặc provider khác, cache/giới hạn quota, normalize kết quả qua schema và trả về UI qua endpoint nội bộ. API key, OAuth/token và secret phải nằm server-side; không đưa vào Vite bundle. MVP không gọi external Places API và không scraping.
 
 ### Product automation adapters
 
