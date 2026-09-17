@@ -1,6 +1,28 @@
-# HaNoiStyle
+# BÔNG Beauty
 
-HaNoiStyle là MVP web public giúp khám phá các shop thời trang nữ local tại Hà Nội. Giao diện ưu tiên mobile, không yêu cầu đăng nhập và hiện dùng dữ liệu mock để có thể thay thế bằng API ở giai đoạn tiếp theo.
+BÔNG là storefront beauty tiếng Việt giúp khám phá son và mỹ phẩm theo thương hiệu, shade, finish, nhu cầu và ngân sách. Giao diện ưu tiên mobile, có tìm kiếm/lọc, tư vấn theo nhu cầu, cửa hàng thử son và dữ liệu catalog mock để có thể thay thế bằng API ở giai đoạn tiếp theo.
+
+Catalog hiện bao phủ Dior, Chanel, YSL, Merzy, Black Rouge, Rom&nd, 3CE, Lancôme, Tom Ford, Burberry và Gucci. Tên sản phẩm, shade và giá là tham khảo từ listing công khai; ảnh son là ảnh sản phẩm thật từ Wikimedia Commons, nhưng không phải packshot chính thức đúng SKU của từng brand.
+
+Ảnh son trong catalog hiện đã chuyển sang ảnh sản phẩm thật từ Wikimedia Commons: `Lipstick_mac_day_4.jpg` (Maria Morri, CC BY-SA 2.0), `MAC_pink_lipstick.jpg` (Jen, CC BY-SA 3.0), `Crystal Hearts Lipstick Review.jpg` (Adam / SuperBestReview, CC BY-SA 4.0) và `Lipstick - My top 5!` (Vanilla and lace, CC BY 2.0). Đây là ảnh son thật dùng làm visual tham khảo, không khẳng định là packshot chính thức đúng SKU của từng thương hiệu; trước khi thương mại hóa cần thay từng ảnh bằng asset được brand/nhà phân phối cấp phép.
+
+Ảnh khách hàng cung cấp cho `Dior Rouge Dior 999 Velvet` được lưu tại
+`public/images/products/dior-999-velvet-2-1.png` và chỉ được gắn cho SKU
+`p-dior-999`. Cần xác nhận quyền sử dụng ảnh trước khi phát hành thương mại.
+
+Ảnh khách hàng cung cấp cho `Dior Rouge Dior 720 Icone Velvet` được lưu tại
+`public/images/products/dior-720-icone-1.jpg`, `dior-720-icone-2.jpg` và
+`dior-720-icone-3.jpg`, chỉ được gắn cho SKU `p-dior-720`.
+
+Ảnh khách hàng cung cấp cho `Dior Addict Shine Lipstick 720 Icône` được lưu
+tại `public/images/products/dior-addict-720-icone-1.webp` đến `-4.webp/jpg`,
+chỉ được gắn cho SKU `p-dior-720-satin`.
+
+Đã bổ sung dòng chính thức `Rouge Dior On Stage Ink Blur Matte` theo trang
+Dior.com, mã dòng `Y0000242`, gồm các shade 100, 122, 200, 217, 458, 480,
+558 và 999. Ảnh được cache từ CDN chính thức của Dior tại
+`public/images/products/dior-on-stage-ink/`; giá hiển thị là `Liên hệ` vì
+trang Dior VN không cung cấp giá trong dữ liệu đã đọc tại thời điểm cập nhật.
 
 ## Chạy local
 
