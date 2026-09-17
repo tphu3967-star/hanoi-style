@@ -1,127 +1,160 @@
-// Demo-only catalog fixture. Images are temporary Unsplash samples, not shop-owned inventory.
-import { vietnamProvinces, provinceRegions } from './vietnamProvinces'
+// BÔNG catalog fixture. Product names, shades and reference prices are based on
+// public brand listings; editorial images use the Unsplash license and are not
+// presented as official packshots.
+const realProductImages = {
+  red: 'https://upload.wikimedia.org/wikipedia/commons/d/dc/Crystal_Hearts_Lipstick_Review.jpg?download=1',
+  pink: 'https://upload.wikimedia.org/wikipedia/commons/9/9b/Lipstick-_My_top_5%21_-_18072840654.jpg?download=1',
+  hearts: 'https://upload.wikimedia.org/wikipedia/commons/d/dc/Crystal_Hearts_Lipstick_Review.jpg?download=1',
+  collection: 'https://upload.wikimedia.org/wikipedia/commons/9/9b/Lipstick-_My_top_5%21_-_18072840654.jpg?download=1',
+}
 
-const sampleImage = (id, width = 900) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=85`
-const categoryVisuals = {
-  'Váy & đầm': [
-    ['photo-1496217590455-aa63a8350eea', 'Ảnh mẫu váy linen nữ dáng midi'],
-    ['photo-1539008835657-9e8e9680c956', 'Ảnh mẫu đầm nữ cổ vuông'],
-    ['photo-1515372039744-b8f02a3ae446', 'Ảnh mẫu váy nữ hai dây'],
-    ['photo-1515886657613-9f3515b0c78f', 'Ảnh mẫu đầm nữ phong cách tối giản'],
+const customerProductImages = {
+  dior999: '/images/products/dior-999-velvet-2-1.png',
+  dior999Gallery: [
+    '/images/products/dior-999-velvet-2-1.png',
+    '/images/products/dior-999-velvet-4-3.png',
+    '/images/products/dior-999-velvet.webp',
   ],
-  'Áo kiểu': [
-    ['photo-1605763240000-7e93b172d754', 'Ảnh mẫu áo sơ mi nữ'],
-    ['photo-1564257577054-2e7f8d50b3b3', 'Ảnh mẫu áo kiểu nữ peplum'],
-    ['photo-1596755389378-c31d21fd1273', 'Ảnh mẫu áo ren nữ'],
-    ['photo-1551488831-00ddcb6c6bd3', 'Ảnh mẫu áo nữ tay dài'],
+  dior720Gallery: [
+    '/images/products/dior-720-icone-1.jpg',
+    '/images/products/dior-720-icone-2.jpg',
+    '/images/products/dior-720-icone-3.jpg',
   ],
-  Quần: [
-    ['photo-1594633312681-425c7b97ccd1', 'Ảnh mẫu quần nữ ống rộng'],
-    ['photo-1541099649105-f69ad21f3246', 'Ảnh mẫu quần jeans nữ'],
-    ['photo-1506629905607-d9ccf2a6e6a6', 'Ảnh mẫu quần nữ phong cách thường ngày'],
+  diorAddict720Gallery: [
+    '/images/products/dior-addict-720-icone-1.webp',
+    '/images/products/dior-addict-720-icone-2.jpg',
+    '/images/products/dior-addict-720-icone-3.webp',
+    '/images/products/dior-addict-720-icone-4.webp',
   ],
-  'Phụ kiện': [
-    ['photo-1553062407-98eeb64c6a62', 'Ảnh mẫu túi cói nữ'],
-    ['photo-1601924994987-69e26d50dc26', 'Ảnh mẫu khăn lụa nữ'],
-    ['photo-1529139574466-a303027c1d8b', 'Ảnh mẫu phụ kiện thời trang nữ'],
-  ],
-  'Đồ công sở': [
-    ['photo-1591369822096-ffd140ec948f', 'Ảnh mẫu blazer nữ công sở'],
-    ['photo-1551488831-00ddcb6c6bd3', 'Ảnh mẫu chân váy công sở nữ'],
-    ['photo-1605763240000-7e93b172d754', 'Ảnh mẫu áo sơ mi công sở nữ'],
+  diorOnStageInkGallery: [
+    '/images/products/dior-on-stage-ink/shade-100.jpg',
+    '/images/products/dior-on-stage-ink/shade-122.jpg',
+    '/images/products/dior-on-stage-ink/shade-200.jpg',
+    '/images/products/dior-on-stage-ink/shade-217.png',
+    '/images/products/dior-on-stage-ink/shade-458.jpg',
+    '/images/products/dior-on-stage-ink/shade-480.jpg',
+    '/images/products/dior-on-stage-ink/shade-558.png',
+    '/images/products/dior-on-stage-ink/shade-999.jpg',
   ],
 }
 
-const categoryImage = (category, index = 0, width = 700) => {
-  const visuals = categoryVisuals[category] || categoryVisuals['Áo kiểu']
-  const [id, imageAlt] = visuals[index % visuals.length]
-  return { image: sampleImage(id, width), imageAlt }
+const image = (id) => {
+  if (id.includes('1586495777744')) return realProductImages.red
+  if (id.includes('1512496015851')) return '/images/eye.jpg'
+  return '/images/beauty.jpg'
 }
 
-export const categories = ['Tất cả', 'Váy & đầm', 'Áo kiểu', 'Quần', 'Phụ kiện', 'Đồ công sở']
+export const categories = ['Tất cả', 'Son môi', 'Trang điểm mặt', 'Trang điểm mắt', 'Skincare', 'Quà tặng']
 export const marketplaceSources = [
-  { id: 'shopee', label: 'Shopee', shortLabel: 'Shopee', tone: 'orange' },
-  { id: 'tiktok-shop', label: 'TikTok Shop', shortLabel: 'TikTok Shop', tone: 'dark' },
+  { id: 'bong', label: 'BÔNG Beauty', shortLabel: 'BÔNG', tone: 'rose' },
+  { id: 'official', label: 'Official brand', shortLabel: 'Official', tone: 'dark' },
 ]
 
-export const shops = [
-  { id: 'may-studio', name: 'Mây Studio', province: 'Hà Nội', district: 'Hoàn Kiếm', category: 'Váy & đầm', description: 'Nàng thơ hiện đại, nhẹ nhàng nhưng luôn có điểm nhấn.', address: '42 Nhà Chung, Hoàn Kiếm, Hà Nội', phone: '098 765 4321', distance: '0,8 km', priceRange: '350K – 1,2M', rating: '4,9', reviews: 128, verified: true, linksAreDemo: true, links: { website: 'https://example.com/hanostyle-demo/may-studio', facebook: 'https://example.com/hanostyle-demo/may-studio-facebook', zalo: 'https://example.com/hanostyle-demo/may-studio-zalo' }, coordinates: { lat: 21.0287, lng: 105.8498 }, image: sampleImage('photo-1496747611176-843222e1e57c'), imageAlt: 'Trang phục nữ tông be trong studio', accent: 'beige' },
-  { id: 'nang-tho', name: 'Nàng Thơ', province: 'Hà Nội', district: 'Hoàn Kiếm', category: 'Đồ công sở', description: 'Đi làm thanh lịch, đi chơi vẫn thật là mình.', address: '18 Trần Quốc Toản, Hoàn Kiếm, Hà Nội', phone: '091 234 5678', distance: '1,4 km', priceRange: '280K – 890K', rating: '4,8', reviews: 96, verified: true, coordinates: { lat: 21.0197, lng: 105.8492 }, image: sampleImage('photo-1551488831-00ddcb6c6bd3'), imageAlt: 'Các mẫu áo và chân váy thời trang nữ', accent: 'lilac' },
-  { id: 'tiem-nha-bom', name: 'Tiệm Nhà Bơm', province: 'Hà Nội', district: 'Hoàn Kiếm', category: 'Áo kiểu', description: 'Những món đồ nhỏ xinh cho ngày thường thêm vui.', address: '7 Ngõ Tràng Tiền, Hoàn Kiếm, Hà Nội', phone: '097 556 7788', distance: '2,1 km', priceRange: '190K – 650K', rating: '4,7', reviews: 74, verified: true, coordinates: { lat: 21.0255, lng: 105.8552 }, image: sampleImage('photo-1506629905607-d9ccf2a6e6a6'), imageAlt: 'Nữ người mẫu mặc áo kiểu sáng màu', accent: 'blue' },
-  { id: 'mot-nua', name: 'Một Nửa', province: 'Hà Nội', district: 'Đống Đa', category: 'Quần', description: 'Phom dáng thoải mái cho nhịp sống thành thị.', address: '31 Đặng Văn Ngữ, Đống Đa, Hà Nội', phone: '096 312 4567', distance: '3,6 km', priceRange: '320K – 980K', rating: '4,8', reviews: 61, verified: true, coordinates: { lat: 21.0162, lng: 105.8246 }, image: sampleImage('photo-1483985988355-763728e1935b'), imageAlt: 'Không gian shop thời trang nữ hiện đại', accent: 'rose' },
-  { id: 'hiem-studio', name: 'Hiên Studio', province: 'Hà Nội', district: 'Tây Hồ', category: 'Phụ kiện', description: 'Phụ kiện thủ công làm mềm mọi bộ đồ.', address: '12 Xuân Diệu, Tây Hồ, Hà Nội', phone: '090 818 2020', distance: '4,8 km', priceRange: '150K – 780K', rating: '4,9', reviews: 43, verified: true, coordinates: { lat: 21.0618, lng: 105.8235 }, image: sampleImage('photo-1529139574466-a303027c1d8b'), imageAlt: 'Phụ kiện và trang phục nữ được sắp đặt', accent: 'gold' },
-  { id: 'gom-fashion', name: 'Gốm Fashion', province: 'Hà Nội', district: 'Hoàn Kiếm', category: 'Váy & đầm', description: 'Chất liệu tự nhiên, bảng màu lấy cảm hứng từ phố cũ.', address: '88 Hàng Gai, Hoàn Kiếm, Hà Nội', phone: '093 420 6868', distance: '1,1 km', priceRange: '450K – 1,5M', rating: '4,6', reviews: 38, verified: true, coordinates: { lat: 21.0339, lng: 105.8493 }, image: sampleImage('photo-1515886657613-9f3515b0c78f'), imageAlt: 'Trang phục nữ phong cách tối giản', accent: 'terracotta' },
-]
+const brandLinks = {
+  Dior: 'https://www.dior.com/en_int/beauty',
+  Chanel: 'https://www.chanel.com/us/makeup/',
+  YSL: 'https://www.yslbeautyus.com/makeup/',
+  Merzy: 'https://merzycosmetic.com/',
+  'Black Rouge': 'https://blackrouge.com/',
+  'Rom&nd': 'https://romand.us/',
+  '3CE': 'https://stylenanda.com/',
+  Lancôme: 'https://www.lancome-usa.com/makeup/',
+  'Tom Ford': 'https://www.tomfordbeauty.com/',
+  Burberry: 'https://us.burberry.com/beauty/',
+  Gucci: 'https://www.gucci.com/us/en/ca/beauty-c-makeup',
+}
 
-// One synthetic, discoverable fixture per additional province/city. Coordinates,
-// names, phone numbers and inventory are placeholders for UI demonstration only.
-shops.push(...vietnamProvinces.filter((province) => province !== 'Hà Nội').map((province, index) => ({
-  id: `demo-${index + 1}`,
-  name: `Nét ${province}`,
-  province,
-  region: provinceRegions[province] || 'Khu vực Việt Nam',
-  category: categories[(index % (categories.length - 1)) + 1],
-  description: `Không gian thời trang nữ mẫu tại ${province}, dùng để minh họa trải nghiệm tìm kiếm toàn quốc.`,
-  address: `Địa chỉ mẫu, ${province}, Việt Nam`,
-  phone: '090 000 0000',
-  distance: 'Chưa tính',
-  priceRange: '250K – 950K',
-  rating: 'Mẫu',
-  reviews: 0,
+const shop = (data) => ({
   verified: true,
-  coordinates: { lat: 9.2 + (index % 18) * 0.72, lng: 102.1 + (index % 12) * 0.45 },
-  image: sampleImage(['photo-1496747611176-843222e1e57c', 'photo-1483985988355-763728e1935b', 'photo-1515886657613-9f3515b0c78f'][index % 3]),
-  imageAlt: `Ảnh mẫu thời trang nữ tại ${province}`,
-  accent: ['beige', 'lilac', 'blue'][index % 3],
-})))
-
-const product = (data) => ({
-  stockStatus: data.stock > 0 ? data.stock < 4 ? 'Sắp hết' : 'Còn hàng' : 'Hết hàng',
-  imageAlt: `Ảnh mẫu sản phẩm ${data.name}, hình minh họa`,
-  marketplaceSource: data.marketplaceSource || 'shopee',
-  sourceLabel: marketplaceSources.find((source) => source.id === (data.marketplaceSource || 'shopee'))?.label || 'Marketplace mẫu',
-  outboundUrl: data.outboundUrl || `https://example.com/hanostyle-demo/${data.id}`,
-  variants: [],
+  province: 'Hà Nội',
+  district: 'Hoàn Kiếm',
+  category: 'Son môi',
+  priceRange: '280K – 2,4M',
+  rating: '4,9',
+  reviews: 320,
+  distance: '0,8 km',
+  phone: '090 818 2020',
+  address: '18 Nhà Chung, Hoàn Kiếm, Hà Nội',
+  description: 'Tư vấn shade trực tiếp, thử màu dưới ánh sáng tự nhiên và gói quà miễn phí.',
+  linksAreDemo: false,
+  links: { website: 'https://bongbeauty.vn', facebook: 'https://www.facebook.com/' },
+  coordinates: { lat: 21.0287, lng: 105.8498 },
+  image: image('photo-1596462502278-27bfdc403348'),
+  imageAlt: 'Bàn trang điểm với các sản phẩm mỹ phẩm tông hồng',
   ...data,
 })
 
-export const products = [
-  product({ id: 'p1', shopId: 'may-studio', category: 'Váy & đầm', name: 'Váy Linen Nắng Mai', price: '690.000đ', oldPrice: '820.000đ', tag: 'Bán chạy', stock: 8, variants: [{ name: 'Màu', values: ['Kem', 'Nâu đất'] }, { name: 'Size', values: ['S', 'M', 'L'] }], ...categoryImage('Váy & đầm', 0), color: 'beige' }),
-  product({ id: 'p2', shopId: 'nang-tho', category: 'Đồ công sở', name: 'Áo Sơ Mi Mộc Miên', price: '420.000đ', tag: 'Mới về', stock: 12, variants: [{ name: 'Màu', values: ['Trắng', 'Xanh nhạt'] }, { name: 'Size', values: ['S', 'M', 'L'] }], ...categoryImage('Đồ công sở', 2), color: 'lilac' }),
-  product({ id: 'p3', shopId: 'may-studio', category: 'Váy & đầm', name: 'Chân Váy Midi Hạ', price: '550.000đ', stock: 3, variants: [{ name: 'Màu', values: ['Xanh khói', 'Đen'] }, { name: 'Size', values: ['S', 'M'] }], ...categoryImage('Váy & đầm', 1), color: 'blue' }),
-  product({ id: 'p4', shopId: 'tiem-nha-bom', category: 'Áo kiểu', name: 'Áo Peplum Cúc Ngọc', price: '390.000đ', stock: 0, variants: [{ name: 'Màu', values: ['Hồng phấn', 'Trắng'] }, { name: 'Size', values: ['M', 'L'] }], ...categoryImage('Áo kiểu', 1), color: 'rose' }),
-  product({ id: 'p5', shopId: 'mot-nua', category: 'Quần', name: 'Quần Suông An Nhiên', price: '480.000đ', tag: 'Dễ mặc', stock: 7, variants: [{ name: 'Màu', values: ['Đen', 'Nâu'] }, { name: 'Size', values: ['S', 'M', 'L', 'XL'] }], ...categoryImage('Quần', 0), color: 'sand' }),
-  product({ id: 'p6', shopId: 'hiem-studio', category: 'Phụ kiện', name: 'Túi Cói Mùa Hạ', price: '320.000đ', stock: 5, variants: [{ name: 'Màu', values: ['Tự nhiên'] }], ...categoryImage('Phụ kiện', 0), color: 'gold' }),
-  product({ id: 'p7', shopId: 'gom-fashion', category: 'Váy & đầm', name: 'Đầm Cổ Vuông Gốm', price: '790.000đ', tag: 'Mới về', stock: 2, variants: [{ name: 'Màu', values: ['Đỏ gạch', 'Kem'] }, { name: 'Size', values: ['S', 'M', 'L'] }], ...categoryImage('Váy & đầm', 2), color: 'terracotta' }),
-  product({ id: 'p8', shopId: 'nang-tho', category: 'Đồ công sở', name: 'Blazer Vải Đũi', price: '890.000đ', stock: 4, variants: [{ name: 'Màu', values: ['Be', 'Navy'] }, { name: 'Size', values: ['S', 'M', 'L'] }], ...categoryImage('Đồ công sở', 0), color: 'beige' }),
-  product({ id: 'p9', shopId: 'tiem-nha-bom', category: 'Áo kiểu', name: 'Áo Ren Ngày Nắng', price: '350.000đ', stock: 9, variants: [{ name: 'Màu', values: ['Trắng'] }, { name: 'Size', values: ['S', 'M'] }], ...categoryImage('Áo kiểu', 2), color: 'white' }),
-  product({ id: 'p10', shopId: 'mot-nua', category: 'Quần', name: 'Jeans Ống Đứng Phố', price: '620.000đ', tag: 'Bán chạy', stock: 6, variants: [{ name: 'Màu', values: ['Xanh denim'] }, { name: 'Size', values: ['26', '27', '28', '29'] }], ...categoryImage('Quần', 1), color: 'denim' }),
-  product({ id: 'p11', shopId: 'hiem-studio', category: 'Phụ kiện', name: 'Khăn Lụa Vẽ Tay', price: '280.000đ', stock: 1, variants: [{ name: 'Màu', values: ['Vàng nghệ', 'Xanh rêu'] }], ...categoryImage('Phụ kiện', 1), color: 'gold' }),
-  product({ id: 'p12', shopId: 'gom-fashion', category: 'Váy & đầm', name: 'Váy Hai Dây Hoàng Hôn', price: '740.000đ', stock: 10, variants: [{ name: 'Màu', values: ['Cam đất', 'Nâu'] }, { name: 'Size', values: ['S', 'M', 'L'] }], ...categoryImage('Váy & đầm', 3), color: 'terracotta' }),
+export const shops = [
+  shop({ id: 'bong-hoan-kiem', name: 'BÔNG Beauty · Nhà Chung', accent: 'rose' }),
+  shop({ id: 'bong-tay-ho', name: 'BÔNG Beauty · Tây Hồ', district: 'Tây Hồ', address: '52 Xuân Diệu, Tây Hồ, Hà Nội', distance: '4,2 km', coordinates: { lat: 21.0618, lng: 105.8235 }, image: image('photo-1522335789203-a90fb38ba796') }),
+  shop({ id: 'bong-online', name: 'BÔNG Online Concierge', district: 'Đống Đa', address: 'Tư vấn online toàn quốc', distance: 'Online', coordinates: { lat: 21.0162, lng: 105.8246 }, image: image('photo-1512496015851-a90fb38ba796') }),
 ]
 
-const marketplaceNames = {
-  'Váy & đầm': ['Đầm Lụa Dạo Phố', 'Váy Hoa Nhẹ Nhàng'],
-  'Áo kiểu': ['Áo Thô Cổ Vuông', 'Áo Voan Tay Bồng'],
-  Quần: ['Quần Linen Ống Rộng', 'Quần Kaki Cạp Cao'],
-  'Phụ kiện': ['Túi Vải Dệt Thủ Công', 'Khuyên Tai Bản Mảnh'],
-  'Đồ công sở': ['Set Áo Gile Thanh Lịch', 'Chân Váy Bút Chì'],
-}
+const product = (data) => ({
+  stockStatus: data.stock > 0 ? data.stock < 4 ? 'Sắp hết' : 'Còn hàng' : 'Hết hàng',
+  imageAlt: `Ảnh minh họa ${data.name}`,
+  marketplaceSource: data.marketplaceSource || 'bong',
+  sourceLabel: data.sourceLabel || 'BÔNG Beauty',
+  outboundUrl: data.outboundUrl || brandLinks[data.brand] || 'https://bongbeauty.vn',
+  variants: [],
+  image: data.image || realProductImages.red,
+  ...data,
+})
 
-products.push(...shops.filter((shop) => shop.province !== 'Hà Nội').flatMap((shop, index) => {
-  const names = marketplaceNames[shop.category] || marketplaceNames['Áo kiểu']
-  return names.map((name, itemIndex) => product({
-    id: `national-p-${index + 1}-${itemIndex + 1}`,
-    shopId: shop.id,
-    province: shop.province,
-    category: shop.category,
-    name: `${name} ${shop.province}`,
-    price: `${320 + ((index + itemIndex * 2) % 7) * 70}.000đ`,
-    tag: itemIndex === 0 ? 'Mẫu marketplace' : 'Ảnh mẫu',
-    stock: 2 + ((index + itemIndex * 3) % 11),
-    marketplaceSource: (index + itemIndex) % 2 === 0 ? 'shopee' : 'tiktok-shop',
-    variants: [{ name: 'Màu', values: ['Kem', 'Xanh', 'Đen'] }, { name: 'Size', values: ['S', 'M', 'L'] }],
-    ...categoryImage(shop.category, index + itemIndex, 700),
-    color: shop.accent,
-  }))
-}))
+const lipstickImage = 'photo-1586495777744-4413f21062fa'
+const beautyImage = 'photo-1596462502278-27bfdc403348'
+const eyeImage = 'photo-1512496015851-a90fb38ba796'
+
+export const products = [
+  product({ id: 'p-dior-999', shopId: 'bong-hoan-kiem', brand: 'Dior', category: 'Son môi', name: 'Dior Rouge Dior 999 Velvet', price: '1.050.000đ', oldPrice: '1.250.000đ', tag: 'Iconic red', stock: 8, finish: 'Velvet lì mịn', need: 'Đi tiệc · sang trọng', image: customerProductImages.dior999, images: customerProductImages.dior999Gallery, color: 'rose', variants: [{ name: 'Shade', values: ['999 Velvet'] }], sourceLabel: 'Customer-provided image', marketplaceSource: 'official' }),
+  product({ id: 'p-chanel-rouge', shopId: 'bong-hoan-kiem', brand: 'Chanel', category: 'Son môi', name: 'Chanel Rouge Allure 99 Pirate', price: '1.180.000đ', tag: 'Luxury', stock: 5, finish: 'Satin ánh nhẹ', need: 'Đỏ cổ điển · tôn da', image: realProductImages.pink, color: 'terracotta', variants: [{ name: 'Shade', values: ['99 Pirate'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-ysl-rouge', shopId: 'bong-tay-ho', brand: 'YSL', category: 'Son môi', name: 'YSL Rouge Pur Couture 1 Le Rouge', price: '1.050.000đ', tag: 'Best seller', stock: 6, finish: 'Satin căng môi', need: 'Hẹn hò · nổi bật', image: image(lipstickImage), color: 'rose', variants: [{ name: 'Shade', values: ['01 Le Rouge'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-merzy-m2', shopId: 'bong-online', brand: 'Merzy', category: 'Son môi', name: 'Merzy The First Velvet Tint M2 Jane', price: '189.000đ', oldPrice: '239.000đ', tag: 'Giá yêu', stock: 14, finish: 'Velvet tint lâu trôi', need: 'Hằng ngày · tiết kiệm', image: image(lipstickImage), color: 'rose', variants: [{ name: 'Shade', values: ['M2 Jane'] }], sourceLabel: 'BÔNG Beauty' }),
+  product({ id: 'p-black-rouge', shopId: 'bong-online', brand: 'Black Rouge', category: 'Son môi', name: 'Black Rouge Air Fit Velvet Tint A06', price: '159.000đ', tag: 'Dễ dùng', stock: 11, finish: 'Velvet tint', need: 'Đi học · đi làm', image: image(lipstickImage), color: 'terracotta', variants: [{ name: 'Shade', values: ['A06 Brick Red'] }] }),
+  product({ id: 'p-romand-23', shopId: 'bong-tay-ho', brand: 'Rom&nd', category: 'Son môi', name: 'Rom&nd Juicy Lasting Tint 23 Nucadamia', price: '229.000đ', tag: 'Trending', stock: 9, finish: 'Juicy bóng nhẹ', need: 'Môi căng mọng · MLBB', image: realProductImages.hearts, color: 'rose', variants: [{ name: 'Shade', values: ['23 Nucadamia'] }] }),
+  product({ id: 'p-3ce-chili', shopId: 'bong-hoan-kiem', brand: '3CE', category: 'Son môi', name: '3CE Blur Water Tint Chasing Rose', price: '390.000đ', stock: 4, finish: 'Blur tint mờ môi', need: 'Makeup Hàn · tự nhiên', image: image(lipstickImage), color: 'rose', variants: [{ name: 'Shade', values: ['Chasing Rose'] }] }),
+  product({ id: 'p-lancome', shopId: 'bong-hoan-kiem', brand: 'Lancôme', category: 'Son môi', name: 'Lancôme L’Absolu Rouge 274 French Touch', price: '920.000đ', tag: 'Premium', stock: 3, finish: 'Cream mượt môi', need: 'Môi khô · dưỡng ẩm', image: image(lipstickImage), color: 'terracotta', variants: [{ name: 'Shade', values: ['274 French Touch'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-tom-ford', shopId: 'bong-hoan-kiem', brand: 'Tom Ford', category: 'Quà tặng', name: 'Tom Ford Lip Color 16 Scarlet Rouge', price: '1.650.000đ', tag: 'Luxury gift', stock: 2, finish: 'Cream satin', need: 'Quà tặng · sưu tầm', image: realProductImages.collection, color: 'gold', variants: [{ name: 'Shade', values: ['16 Scarlet Rouge'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-burberry', shopId: 'bong-tay-ho', brand: 'Burberry', category: 'Son môi', name: 'Burberry Kisses 109 Military Red', price: '980.000đ', stock: 3, finish: 'Satin sheer', need: 'Thanh lịch · công sở', image: image(lipstickImage), color: 'terracotta', variants: [{ name: 'Shade', values: ['109 Military Red'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-gucci', shopId: 'bong-hoan-kiem', brand: 'Gucci', category: 'Quà tặng', name: 'Gucci Rouge à Lèvres Goldie Red 25', price: '1.350.000đ', tag: 'Collector', stock: 2, finish: 'Lipstick satin', need: 'Quà tặng · fashionista', image: image(lipstickImage), color: 'gold', variants: [{ name: 'Shade', values: ['25 Goldie Red'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-face', shopId: 'bong-tay-ho', brand: 'BÔNG edit', category: 'Trang điểm mặt', name: 'Kem má dạng lỏng Soft Bloom', price: '320.000đ', tag: 'Tư vấn viên chọn', stock: 7, finish: 'Dewy tự nhiên', need: 'Da glowy · makeup nhanh', image: image(beautyImage), color: 'rose', variants: [{ name: 'Tone', values: ['Peach', 'Rose'] }] }),
+  product({ id: 'p-eye', shopId: 'bong-online', brand: 'BÔNG edit', category: 'Trang điểm mắt', name: 'Bảng mắt 9 ô Everyday Muse', price: '420.000đ', stock: 6, finish: 'Matte & shimmer', need: 'Makeup đi làm', image: image(eyeImage), color: 'gold', variants: [{ name: 'Tone', values: ['Warm nude'] }] }),
+  product({ id: 'p-care', shopId: 'bong-online', brand: 'BÔNG edit', category: 'Skincare', name: 'Son dưỡng phục hồi Petal Balm', price: '260.000đ', tag: 'Môi khô', stock: 12, finish: 'Bóng dưỡng', need: 'Môi khô · dùng mỗi ngày', image: image(beautyImage), color: 'rose', variants: [{ name: 'Mùi', values: ['Không mùi'] }] }),
+  product({ id: 'p-dior-720', shopId: 'bong-hoan-kiem', brand: 'Dior', category: 'Son môi', name: 'Dior Rouge Dior 720 Icone Velvet', price: '1.050.000đ', stock: 5, finish: 'Velvet lì mịn', need: 'Hồng đất · đi làm', image: customerProductImages.dior720Gallery[0], images: customerProductImages.dior720Gallery, color: 'rose', variants: [{ name: 'Shade', values: ['720 Icone'] }], sourceLabel: 'Customer-provided image', marketplaceSource: 'official' }),
+  product({ id: 'p-dior-on-stage-ink', shopId: 'bong-hoan-kiem', brand: 'Dior', category: 'Son môi', name: 'Rouge Dior On Stage Ink Blur Matte', price: 'Liên hệ', tag: 'Official Dior', stock: 0, finish: 'Liquid lì mờ · chống lem', need: 'Lì nhẹ môi · không chuyển màu', image: realProductImages.red, images: realProductImages.red ? customerProductImages.diorOnStageInkGallery : [], color: 'rose', variants: [{ name: 'Shade', values: ['100', '122', '200', '217', '458', '480', '558', '999'] }], sourceLabel: 'Dior.com official', marketplaceSource: 'official', outboundUrl: 'https://www.dior.com/en_vn/beauty/products/rouge-dior-on-stage-ink-Y0000242.html' }),
+  product({ id: 'p-chanel-116', shopId: 'bong-hoan-kiem', brand: 'Chanel', category: 'Son môi', name: 'Chanel Rouge Allure 116 Êblouissante', price: '1.180.000đ', stock: 4, finish: 'Satin ánh nhẹ', need: 'Đỏ berry · tiệc tối', image: realProductImages.pink, color: 'terracotta', variants: [{ name: 'Shade', values: ['116 Êblouissante'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-ysl-21', shopId: 'bong-tay-ho', brand: 'YSL', category: 'Son môi', name: 'YSL Rouge Pur Couture 21 Rouge Paradoxe', price: '1.050.000đ', stock: 5, finish: 'Satin căng môi', need: 'Đỏ lạnh · nổi bật', image: realProductImages.red, color: 'rose', variants: [{ name: 'Shade', values: ['21 Rouge Paradoxe'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-merzy-v6', shopId: 'bong-online', brand: 'Merzy', category: 'Son môi', name: 'Merzy The First Velvet Tint V6 Firenze Negroni', price: '189.000đ', stock: 10, finish: 'Velvet tint lâu trôi', need: 'Đỏ nâu · cá tính', image: realProductImages.hearts, color: 'terracotta', variants: [{ name: 'Shade', values: ['V6 Firenze Negroni'] }] }),
+  product({ id: 'p-merzy-m13', shopId: 'bong-online', brand: 'Merzy', category: 'Son môi', name: 'Merzy The First Velvet Tint M13 Seul', price: '189.000đ', stock: 8, finish: 'Velvet tint', need: 'Đỏ gạch · hằng ngày', image: realProductImages.collection, color: 'rose', variants: [{ name: 'Shade', values: ['M13 Seul'] }] }),
+  product({ id: 'p-black-rouge-a12', shopId: 'bong-online', brand: 'Black Rouge', category: 'Son môi', name: 'Black Rouge Air Fit Velvet Tint A12 Dashed Brown', price: '159.000đ', stock: 13, finish: 'Velvet tint', need: 'Nâu cam · makeup Hàn', image: realProductImages.collection, color: 'terracotta', variants: [{ name: 'Shade', values: ['A12 Dashed Brown'] }] }),
+  product({ id: 'p-black-rouge-a37', shopId: 'bong-online', brand: 'Black Rouge', category: 'Son môi', name: 'Black Rouge Air Fit Velvet Tint A37 Peach Ade', price: '159.000đ', stock: 9, finish: 'Velvet tint', need: 'Cam đào · trẻ trung', image: realProductImages.pink, color: 'rose', variants: [{ name: 'Shade', values: ['A37 Peach Ade'] }] }),
+  product({ id: 'p-romand-06', shopId: 'bong-tay-ho', brand: 'Rom&nd', category: 'Son môi', name: 'Rom&nd Juicy Lasting Tint 06 Figfig', price: '229.000đ', stock: 12, finish: 'Juicy bóng nhẹ', need: 'Hồng mận · MLBB', image: realProductImages.hearts, color: 'rose', variants: [{ name: 'Shade', values: ['06 Figfig'] }] }),
+  product({ id: 'p-romand-22', shopId: 'bong-tay-ho', brand: 'Rom&nd', category: 'Son môi', name: 'Rom&nd Juicy Lasting Tint 22 Pomelo Skin', price: '229.000đ', stock: 10, finish: 'Juicy bóng nhẹ', need: 'Cam nude · tự nhiên', image: realProductImages.pink, color: 'rose', variants: [{ name: 'Shade', values: ['22 Pomelo Skin'] }] }),
+  product({ id: 'p-3ce-speak', shopId: 'bong-hoan-kiem', brand: '3CE', category: 'Son môi', name: '3CE Blur Water Tint Speak Up', price: '390.000đ', stock: 7, finish: 'Blur tint mờ môi', need: 'Đỏ hồng · dễ dùng', image: realProductImages.red, color: 'rose', variants: [{ name: 'Shade', values: ['Speak Up'] }] }),
+  product({ id: 'p-3ce-chill', shopId: 'bong-hoan-kiem', brand: '3CE', category: 'Son môi', name: '3CE Velvet Lip Tint Chill Move', price: '390.000đ', stock: 6, finish: 'Velvet tint', need: 'Nâu lạnh · thời thượng', image: realProductImages.collection, color: 'terracotta', variants: [{ name: 'Shade', values: ['Chill Move'] }] }),
+  product({ id: 'p-lancome-295', shopId: 'bong-hoan-kiem', brand: 'Lancôme', category: 'Son môi', name: 'Lancôme L’Absolu Rouge 295 French Touch', price: '920.000đ', stock: 4, finish: 'Cream mượt môi', need: 'Đỏ hồng · sang nhẹ', image: realProductImages.red, color: 'rose', variants: [{ name: 'Shade', values: ['295 French Touch'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-tomford-07', shopId: 'bong-hoan-kiem', brand: 'Tom Ford', category: 'Quà tặng', name: 'Tom Ford Lip Color 07 Ruby Rush', price: '1.650.000đ', stock: 2, finish: 'Cream satin', need: 'Đỏ ruby · quà tặng', image: realProductImages.collection, color: 'gold', variants: [{ name: 'Shade', values: ['07 Ruby Rush'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-burberry-93', shopId: 'bong-tay-ho', brand: 'Burberry', category: 'Son môi', name: 'Burberry Kisses 93 Russet', price: '980.000đ', stock: 3, finish: 'Satin sheer', need: 'Đỏ nâu · thanh lịch', image: realProductImages.pink, color: 'terracotta', variants: [{ name: 'Shade', values: ['93 Russet'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-gucci-505', shopId: 'bong-hoan-kiem', brand: 'Gucci', category: 'Quà tặng', name: 'Gucci Rouge à Lèvres 505 Janet Rust', price: '1.350.000đ', stock: 2, finish: 'Lipstick satin', need: 'Cam đất · fashionista', image: realProductImages.collection, color: 'gold', variants: [{ name: 'Shade', values: ['505 Janet Rust'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-dior-720-satin', shopId: 'bong-hoan-kiem', brand: 'Dior', category: 'Son môi', name: 'Dior Addict Shine Lipstick 720 Icône', price: '1.090.000đ', stock: 4, finish: 'Shine căng bóng', need: 'Môi mọng · hằng ngày', image: customerProductImages.diorAddict720Gallery[0], images: customerProductImages.diorAddict720Gallery, color: 'rose', variants: [{ name: 'Shade', values: ['720 Icône'] }], sourceLabel: 'Customer-provided image', marketplaceSource: 'official' }),
+  product({ id: 'p-dior-760', shopId: 'bong-hoan-kiem', brand: 'Dior', category: 'Son môi', name: 'Dior Addict Shine Lipstick 760 Favori', price: '1.090.000đ', stock: 3, finish: 'Shine căng bóng', need: 'Hồng berry · nữ tính', image: realProductImages.hearts, color: 'rose', variants: [{ name: 'Shade', values: ['760 Favori'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-chanel-58', shopId: 'bong-hoan-kiem', brand: 'Chanel', category: 'Son môi', name: 'Chanel Rouge Allure 58 Rouge Vie', price: '1.180.000đ', stock: 4, finish: 'Satin ánh nhẹ', need: 'Đỏ hồng · thanh lịch', image: realProductImages.red, color: 'rose', variants: [{ name: 'Shade', values: ['58 Rouge Vie'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-chanel-152', shopId: 'bong-hoan-kiem', brand: 'Chanel', category: 'Son môi', name: 'Chanel Rouge Coco 152 Shake', price: '1.090.000đ', stock: 3, finish: 'Cream mềm môi', need: 'Cam san hô · tươi sáng', image: realProductImages.collection, color: 'terracotta', variants: [{ name: 'Shade', values: ['152 Shake'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-ysl-1966', shopId: 'bong-tay-ho', brand: 'YSL', category: 'Son môi', name: 'YSL Rouge Pur Couture 1966 Rouge Libre', price: '1.050.000đ', stock: 5, finish: 'Satin mịn môi', need: 'Đỏ cam · nổi bật', image: realProductImages.red, color: 'terracotta', variants: [{ name: 'Shade', values: ['1966 Rouge Libre'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-ysl-12', shopId: 'bong-tay-ho', brand: 'YSL', category: 'Son môi', name: 'YSL The Slim 12 Nu Incongru', price: '980.000đ', stock: 4, finish: 'Lì mảnh nhẹ môi', need: 'Nude hồng · công sở', image: realProductImages.collection, color: 'rose', variants: [{ name: 'Shade', values: ['12 Nu Incongru'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-merzy-v17', shopId: 'bong-online', brand: 'Merzy', category: 'Son môi', name: 'Merzy The First Velvet Tint V17 Firenze Negroni', price: '189.000đ', stock: 11, finish: 'Velvet tint lâu trôi', need: 'Đỏ gạch · cá tính', image: realProductImages.red, color: 'terracotta', variants: [{ name: 'Shade', values: ['V17 Firenze Negroni'] }] }),
+  product({ id: 'p-merzy-m8', shopId: 'bong-online', brand: 'Merzy', category: 'Son môi', name: 'Merzy The First Velvet Tint M8 Firenze Negroni', price: '189.000đ', stock: 10, finish: 'Velvet tint', need: 'Đỏ nâu · đi tiệc', image: realProductImages.hearts, color: 'terracotta', variants: [{ name: 'Shade', values: ['M8 Firenze Negroni'] }] }),
+  product({ id: 'p-black-rouge-a04', shopId: 'bong-online', brand: 'Black Rouge', category: 'Son môi', name: 'Black Rouge Air Fit Velvet Tint A04 Raspberry Syrup', price: '159.000đ', stock: 12, finish: 'Velvet tint', need: 'Đỏ mâm xôi · tôn da', image: realProductImages.red, color: 'rose', variants: [{ name: 'Shade', values: ['A04 Raspberry Syrup'] }] }),
+  product({ id: 'p-black-rouge-a11', shopId: 'bong-online', brand: 'Black Rouge', category: 'Son môi', name: 'Black Rouge Air Fit Velvet Tint A11 Tanned Brick', price: '159.000đ', stock: 8, finish: 'Velvet tint', need: 'Đỏ nâu · makeup Hàn', image: realProductImages.collection, color: 'terracotta', variants: [{ name: 'Shade', values: ['A11 Tanned Brick'] }] }),
+  product({ id: 'p-romand-07', shopId: 'bong-tay-ho', brand: 'Rom&nd', category: 'Son môi', name: 'Rom&nd Juicy Lasting Tint 07 Jujube', price: '229.000đ', stock: 11, finish: 'Juicy bóng nhẹ', need: 'Đỏ nâu · MLBB', image: realProductImages.hearts, color: 'terracotta', variants: [{ name: 'Shade', values: ['07 Jujube'] }] }),
+  product({ id: 'p-romand-19', shopId: 'bong-tay-ho', brand: 'Rom&nd', category: 'Son môi', name: 'Rom&nd Juicy Lasting Tint 19 Almond Rose', price: '229.000đ', stock: 9, finish: 'Juicy bóng nhẹ', need: 'Hồng đất · hằng ngày', image: realProductImages.pink, color: 'rose', variants: [{ name: 'Shade', values: ['19 Almond Rose'] }] }),
+  product({ id: 'p-3ce-go-now', shopId: 'bong-hoan-kiem', brand: '3CE', category: 'Son môi', name: '3CE Blur Water Tint Go Now', price: '390.000đ', stock: 5, finish: 'Blur tint mờ môi', need: 'Đỏ hồng · trẻ trung', image: realProductImages.red, color: 'rose', variants: [{ name: 'Shade', values: ['Go Now'] }] }),
+  product({ id: 'p-3ce-double-wind', shopId: 'bong-hoan-kiem', brand: '3CE', category: 'Son môi', name: '3CE Velvet Lip Tint Double Wind', price: '390.000đ', stock: 5, finish: 'Velvet tint', need: 'Đỏ lạnh · thời thượng', image: realProductImages.hearts, color: 'rose', variants: [{ name: 'Shade', values: ['Double Wind'] }] }),
+  product({ id: 'p-lancome-888', shopId: 'bong-hoan-kiem', brand: 'Lancôme', category: 'Son môi', name: 'Lancôme L’Absolu Rouge 888 French Touch', price: '920.000đ', stock: 3, finish: 'Cream mượt môi', need: 'Đỏ ruby · sang trọng', image: realProductImages.red, color: 'rose', variants: [{ name: 'Shade', values: ['888 French Touch'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-lancome-274', shopId: 'bong-hoan-kiem', brand: 'Lancôme', category: 'Son môi', name: 'Lancôme L’Absolu Rouge Drama Ink 274', price: '890.000đ', stock: 4, finish: 'Liquid lì nhẹ môi', need: 'Đỏ nâu · lâu trôi', image: realProductImages.collection, color: 'terracotta', variants: [{ name: 'Shade', values: ['274'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-tomford-100', shopId: 'bong-hoan-kiem', brand: 'Tom Ford', category: 'Quà tặng', name: 'Tom Ford Lip Color 100 Dismantle', price: '1.650.000đ', stock: 2, finish: 'Cream satin', need: 'Nude hồng · luxury', image: realProductImages.pink, color: 'gold', variants: [{ name: 'Shade', values: ['100 Dismantle'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-burberry-407', shopId: 'bong-tay-ho', brand: 'Burberry', category: 'Son môi', name: 'Burberry Kisses 407 English Rose', price: '980.000đ', stock: 3, finish: 'Satin sheer', need: 'Hồng rose · thanh lịch', image: realProductImages.pink, color: 'rose', variants: [{ name: 'Shade', values: ['407 English Rose'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-burberry-429', shopId: 'bong-tay-ho', brand: 'Burberry', category: 'Son môi', name: 'Burberry Kisses 429 Military Red', price: '980.000đ', stock: 2, finish: 'Satin sheer', need: 'Đỏ lạnh · cổ điển', image: realProductImages.red, color: 'rose', variants: [{ name: 'Shade', values: ['429 Military Red'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-gucci-25', shopId: 'bong-hoan-kiem', brand: 'Gucci', category: 'Quà tặng', name: 'Gucci Rouge à Lèvres 25 Goldie Red', price: '1.350.000đ', stock: 2, finish: 'Lipstick satin', need: 'Đỏ tươi · collector', image: realProductImages.red, color: 'gold', variants: [{ name: 'Shade', values: ['25 Goldie Red'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+  product({ id: 'p-gucci-208', shopId: 'bong-hoan-kiem', brand: 'Gucci', category: 'Quà tặng', name: 'Gucci Rouge à Lèvres 208 They Met in Argentina', price: '1.350.000đ', stock: 2, finish: 'Lipstick satin', need: 'Hồng đỏ · fashionista', image: realProductImages.hearts, color: 'rose', variants: [{ name: 'Shade', values: ['208 They Met in Argentina'] }], sourceLabel: 'Official brand', marketplaceSource: 'official' }),
+]
